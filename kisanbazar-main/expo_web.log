@@ -1,0 +1,19 @@
+nohup: ignoring input
+Starting project at /home/niraja/Desktop/pro1
+Metro is running in CI mode, reloads are disabled. Remove CI=true to enable watch mode.
+Starting Metro Bundler
+Web Bundled 938ms index.js (2639 modules)
+Web Bundled 973ms index.js (1 module)
+The following packages should be updated for best compatibility with the installed expo version:
+  @shopify/react-native-skia@1.4.2 - expected version: 1.5.0
+  expo-linear-gradient@13.0.2 - expected version: ~14.0.2
+  react-native@0.76.7 - expected version: 0.76.9
+Your project may not work correctly until you install the expected versions of the packages.
+Waiting on http://localhost:8081
+Logs for your project will appear below.
+Web Bundled 78ms index.js (1 module)
+Web Bundled 62ms index.js (1 module)
+Web Bundled 98ms index.js (1 module)
+Web Bundled 71ms index.js (1 module)
+Web Bundled 88ms index.js (1 module)
+Web Bundled 66ms index.js (1 module)

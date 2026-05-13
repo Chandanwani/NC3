@@ -1,0 +1,38 @@
+{
+    "rules": {
+        ".read": "auth != null",
+        ".write": "auth != null",
+        "soil": {
+            "$userId": {
+                ".read": "auth != null && auth.uid == $userId",
+                ".write": "auth != null && auth.uid == $userId"
+            }
+        },
+        "markets": {
+            ".read": "auth != null",
+            ".write": "auth != null"
+        },
+        "community": {
+            "posts": {
+                ".read": "auth != null",
+                ".write": "auth != null"
+            }
+        },
+        "logistics": {
+            ".read": "auth != null",
+            ".write": "auth != null"
+        },
+        "scans": {
+            "$userId": {
+                ".read": "auth != null && auth.uid == $userId",
+                ".write": "auth != null && auth.uid == $userId"
+            }
+        },
+        "users": {
+            "$userId": {
+                ".read": "auth != null && auth.uid == $userId",
+                ".write": "auth != null && auth.uid == $userId"
+            }
+        }
+    }
+}

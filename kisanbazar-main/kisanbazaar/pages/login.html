@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login — KisanBazaar</title>
+    <meta name="description" content="Sign in to KisanBazaar — India's most trusted farm-to-table marketplace." />
+    <link rel="stylesheet" href="../css/style.css" />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;600;700;800&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet" />
+    <style>
+        .auth-visual {
+            position: relative;
+            overflow: hidden;
+        }
+        .auth-visual-img {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: 0;
+            opacity: 0.45;
+        }
+        .auth-visual-overlay {
+            position: relative;
+            z-index: 1;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 40px;
+        }
+        .auth-visual h2 {
+            font-size: 42px;
+            font-weight: 900;
+            line-height: 1.15;
+            color: #fff;
+            text-shadow: 0 2px 12px rgba(0,0,0,0.4);
+        }
+        .auth-visual p {
+            color: rgba(255,255,255,0.9);
+            font-size: 16px;
+            line-height: 1.7;
+            text-shadow: 0 1px 6px rgba(0,0,0,0.3);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="auth-page">
+        <!-- ── Left Visual ─────────────────────────────────────── -->
+        <div class="auth-visual" style="background:linear-gradient(160deg,#1B5E20 0%,#2E7D32 60%,#33691E 100%);">
+            <img src="../images/farm_hero_login.png" alt="Farm landscape" class="auth-visual-img" />
+            <div class="auth-visual-overlay">
+                <div>
+                    <a href="../index.html"
+                        style="font-family:'Playfair Display',serif; font-size:24px; font-weight:900; color:#fff; display:flex; align-items:center; gap:10px; margin-bottom:40px; text-decoration:none;">
+                        🌿 KisanBazaar
+                    </a>
+                    <h2>Farm Fresh.<br />Direct to You.</h2>
+                    <p style="margin-top:16px; max-width:320px;">India's most trusted platform connecting farmers directly with buyers.
+                        No middlemen. Better prices for everyone.</p>
+                </div>
+                <div>
+                    <div class="auth-dots" style="display:flex;flex-direction:column;gap:12px;margin-bottom:24px;">
+                        <div class="auth-dot">✅ 50,000+ Farmers</div>
+                        <div class="auth-dot">📦 1,20,000+ Orders Delivered</div>
+                        <div class="auth-dot">🔒 Secure Payments</div>
+                    </div>
+                    <div style="background:rgba(255,255,255,0.12); border-radius:16px; padding:20px; border:1px solid rgba(255,255,255,0.2);">
+                        <p style="color:rgba(255,255,255,0.6); font-size:12px; margin-bottom:8px; letter-spacing:1px;">FARMER TESTIMONIAL</p>
+                        <p style="color:#fff; font-size:15px; line-height:1.7; font-style:italic;">"I earn 40% more now.
+                            KisanBazaar is the best thing that happened to my farm."</p>
+                        <p style="color:rgba(255,255,255,0.6); font-size:13px; margin-top:10px;">— Ramesh Kumar, Nashik</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ── Right Form Panel ────────────────────────────────── -->
+        <div class="auth-form-panel">
+            <div style="max-width:400px; width:100%;">
+                <h3 style="font-size:30px; margin-bottom:8px;">Welcome back</h3>
+                <p class="text-muted" style="margin-bottom:32px;">Sign in to your KisanBazaar account</p>
+
+                <div class="auth-tabs">
+                    <button class="auth-tab active" id="tab-buyer" onclick="switchTab('buyer')">🛒 Buyer</button>
+                    <button class="auth-tab" id="tab-farmer" onclick="switchTab('farmer')">🌾 Farmer</button>
+                </div>
+
+                <form id="login-form" onsubmit="handleLogin(event)">
+                    <div class="form-group">
+                        <label class="form-label">Email Address</label>
+                        <input type="email" class="form-control" id="login-email"
+                            placeholder="you@example.com" required />
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" style="display:flex; justify-content:space-between;">
+                            Password
+                            <a href="#" style="color:var(--primary); font-size:13px;">Forgot password?</a>
+                        </label>
+                        <div style="position:relative;">
+                            <input type="password" class="form-control" id="login-password"
+                                placeholder="Enter your password" required style="padding-right:48px;" />
+                            <button type="button" onclick="togglePwd()"
+                                style="position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;font-size:18px;">👁</button>
+                        </div>
+                    </div>
+
+                    <div style="display:flex; align-items:center; gap:8px; margin-bottom:24px;">
+                        <input type="checkbox" id="remember" style="width:16px;height:16px;" />
+                        <label for="remember" style="font-size:14px; color:var(--text-muted);">Remember me for 30
+                            days</label>
+                    </div>
+
+                    <div id="login-error" style="display:none; color:#c62828; background:#ffebee; border:1px solid #ef9a9a; border-radius:8px; padding:12px; margin-bottom:16px; font-size:14px;"></div>
+
+                    <button type="submit" class="btn btn-primary w-full btn-lg" id="login-btn">Sign In</button>
+
+                    <p style="text-align:center; margin-top:24px; color:var(--text-muted); font-size:14px;">
+                        Don't have an account?
+                        <a href="#" onclick="goRegister(); return false;" style="color:var(--primary); font-weight:700;">Register
+                            here</a>
+                    </p>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="toast-container" id="toast-container"></div>
+
+    <!-- IMPORTANT: app.js must load BEFORE inline script so KBSession is available -->
+    <script src="../js/app.js"></script>
+    <script>
+        let activeTab = 'buyer';
+
+        function switchTab(tab) {
+            activeTab = tab;
+            document.getElementById('tab-buyer').classList.toggle('active', tab === 'buyer');
+            document.getElementById('tab-farmer').classList.toggle('active', tab === 'farmer');
+        }
+
+        function togglePwd() {
+            const p = document.getElementById('login-password');
+            p.type = p.type === 'password' ? 'text' : 'password';
+        }
+
+        function showError(msg) {
+            const el = document.getElementById('login-error');
+            el.textContent = msg;
+            el.style.display = 'block';
+        }
+        function hideError() {
+            document.getElementById('login-error').style.display = 'none';
+        }
+
+        async function handleLogin(e) {
+            e.preventDefault();
+            hideError();
+            const email = document.getElementById('login-email').value.trim();
+            const password = document.getElementById('login-password').value;
+            const btn = document.getElementById('login-btn');
+
+            btn.textContent = 'Signing in…';
+            btn.disabled = true;
+
+            try {
+                const res = await KBSession.login(email, password);
+                if (res.success) {
+                    showToast('✅ Login successful! Redirecting…', 'success');
+                    setTimeout(() => {
+                        window.location.href = res.user.role === 'farmer'
+                            ? 'farmer-dashboard.html'
+                            : 'buyer-dashboard.html';
+                    }, 800);
+                }
+            } catch (err) {
+                showError(err.message || 'Invalid email or password. Please try again.');
+                btn.textContent = 'Sign In';
+                btn.disabled = false;
+            }
+        }
+
+        function goRegister() {
+            window.location.href = activeTab === 'farmer' ? 'farmer-register.html' : 'buyer-register.html';
+        }
+
+        // Auto-redirect if already logged in
+        document.addEventListener('DOMContentLoaded', () => {
+            const user = KBSession.getUser();
+            if (user) {
+                window.location.href = user.role === 'farmer' ? 'farmer-dashboard.html' : 'buyer-dashboard.html';
+            }
+        });
+    </script>
+</body>
+
+</html>

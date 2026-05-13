@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Product Details — KisanBazaar</title>
+    <link rel="stylesheet" href="../css/style.css" />
+</head>
+
+<body>
+
+    <nav class="navbar">
+        <a href="../index.html" class="navbar-brand">🌿 KisanBazaar</a>
+        <ul class="navbar-nav">
+            <li><a href="../products.html">Products</a></li>
+        </ul>
+        <div class="navbar-actions">
+            <a href="cart.html" class="btn btn-outline btn-sm">🛒 Cart <span class="cart-count"
+                    style="background:var(--accent);color:#fff;border-radius:100px;padding:2px 8px;font-size:12px;margin-left:4px;">0</span></a>
+            <a href="login.html" class="btn btn-primary btn-sm">Sign In</a>
+        </div>
+    </nav>
+
+    <section>
+        <div class="container">
+            <!-- Breadcrumb -->
+            <div
+                style="display:flex; gap:8px; align-items:center; margin-bottom:28px; font-size:14px; color:var(--text-muted);">
+                <a href="../index.html" style="color:var(--primary);">Home</a> ›
+                <a href="../products.html" style="color:var(--primary);">Products</a> ›
+                <span id="breadcrumb-name">...</span>
+            </div>
+
+            <div class="product-detail">
+                <!-- Image -->
+                <div>
+                    <div id="product-emoji-box"
+                        style="background:linear-gradient(135deg,rgba(46,125,50,0.06),rgba(46,125,50,0.15)); border-radius:var(--radius-lg); height:380px; display:flex; align-items:center; justify-content:center; font-size:140px; margin-bottom:16px; cursor:pointer;">
+                        🍅
+                    </div>
+                    <div style="display:flex; gap:12px;">
+                        <div id="thumb1" onclick="selectThumb(0)"
+                            style="flex:1;background:rgba(46,125,50,0.08);border-radius:var(--radius-sm);height:80px;display:flex;align-items:center;justify-content:center;font-size:36px;cursor:pointer;border:2px solid var(--primary);">
+                            🍅</div>
+                        <div id="thumb2" onclick="selectThumb(1)"
+                            style="flex:1;background:rgba(46,125,50,0.04);border-radius:var(--radius-sm);height:80px;display:flex;align-items:center;justify-content:center;font-size:36px;cursor:pointer;border:2px solid transparent;">
+                            🌿</div>
+                        <div id="thumb3" onclick="selectThumb(2)"
+                            style="flex:1;background:rgba(46,125,50,0.04);border-radius:var(--radius-sm);height:80px;display:flex;align-items:center;justify-content:center;font-size:36px;cursor:pointer;border:2px solid transparent;">
+                            📦</div>
+                    </div>
+                </div>
+
+                <!-- Details -->
+                <div>
+                    <div style="display:flex; gap:8px; margin-bottom:12px; flex-wrap:wrap;">
+                        <span class="badge badge-green" id="prod-category">Vegetables</span>
+                        <span class="badge badge-amber" id="prod-organic-badge" style="display:none;">🌿 Organic</span>
+                        <span class="badge badge-green">✅ Verified Farmer</span>
+                    </div>
+
+                    <h1 id="prod-name" style="font-size:32px; margin-bottom:12px;">Fresh Tomatoes</h1>
+
+                    <div style="display:flex; align-items:center; gap:12px; margin-bottom:16px;">
+                        <div style="color:#f59e0b; font-size:20px;" id="stars">⭐⭐⭐⭐⭐</div>
+                        <span style="font-weight:600;" id="prod-rating">4.8</span>
+                        <span class="text-muted" id="prod-reviews">(127 reviews)</span>
+                    </div>
+
+                    <div style="display:flex; align-items:baseline; gap:8px; margin-bottom:24px;">
+                        <span id="prod-price" style="font-size:40px; font-weight:800; color:var(--primary);">₹28</span>
+                        <span id="prod-unit" class="text-muted">/kg</span>
+                        <span
+                            style="background:rgba(46,125,50,0.1); color:var(--primary); font-size:13px; font-weight:700; padding:4px 10px; border-radius:100px; margin-left:8px;">No
+                            middlemen</span>
+                    </div>
+
+                    <!-- Farmer Info -->
+                    <div
+                        style="background:rgba(46,125,50,0.04); border:1px solid var(--border); border-radius:var(--radius-sm); padding:16px; margin-bottom:24px; display:flex; align-items:center; gap:16px;">
+                        <div style="width:52px;height:52px;border-radius:50%;background:linear-gradient(135deg,var(--primary),var(--primary-light));display:flex;align-items:center;justify-content:center;color:#fff;font-size:20px;font-weight:800;"
+                            id="farmer-avatar">R</div>
+                        <div style="flex:1;">
+                            <p style="font-weight:700; margin-bottom:2px;" id="farmer-name">Ramesh Kumar</p>
+                            <p class="text-muted" style="font-size:13px;" id="farmer-region">📍 Nashik, Maharashtra</p>
+                            <div
+                                style="display:flex; gap:8px; margin-top:4px; font-size:12px; color:var(--text-muted);">
+                                <span>⭐ 4.9 rating</span>
+                                <span>·</span>
+                                <span>1,240 orders</span>
+                                <span>·</span>
+                                <span>✅ KYC Verified</span>
+                            </div>
+                        </div>
+                        <a href="#reviews" class="btn btn-outline btn-sm">View Farm</a>
+                    </div>
+
+                    <!-- Qty Selector -->
+                    <div style="display:flex; align-items:center; gap:16px; margin-bottom:20px; flex-wrap:wrap;">
+                        <div>
+                            <label class="form-label" style="margin-bottom:8px;">Quantity (<span
+                                    id="unit-label">kg</span>)</label>
+                            <div class="qty-control" style="border-width:2px; border-color:var(--border);">
+                                <button class="qty-btn" onclick="changeQty(-1)">−</button>
+                                <span class="qty-num" id="qty-display">1</span>
+                                <button class="qty-btn" onclick="changeQty(1)">+</button>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="form-label" style="margin-bottom:8px;">Total</label>
+                            <span id="line-total"
+                                style="font-size:24px; font-weight:800; color:var(--primary);">₹28</span>
+                        </div>
+                    </div>
+
+                    <div style="display:flex; gap:12px; margin-bottom:24px; flex-wrap:wrap;">
+                        <button class="btn btn-primary btn-lg" style="flex:1; justify-content:center;"
+                            onclick="addToCartNow()">🛒 Add to Cart</button>
+                        <button class="btn btn-accent btn-lg" style="flex:1; justify-content:center;"
+                            onclick="buyNow()">⚡ Buy Now</button>
+                        <button class="btn btn-outline"
+                            style="width:52px; height:52px; padding:0; font-size:20px; justify-content:center;"
+                            title="Add to Wishlist" onclick="toggleWishlist(this)">♡</button>
+                    </div>
+
+                    <!-- Delivery info -->
+                    <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:24px;">
+                        <div
+                            style="background:var(--bg); border-radius:var(--radius-sm); padding:12px; display:flex; align-items:center; gap:10px;">
+                            <span style="font-size:24px;">🚚</span>
+                            <div>
+                                <p style="font-weight:700; font-size:13px;">Free Delivery</p>
+                                <p class="text-muted" style="font-size:12px;">On orders above ₹499</p>
+                            </div>
+                        </div>
+                        <div
+                            style="background:var(--bg); border-radius:var(--radius-sm); padding:12px; display:flex; align-items:center; gap:10px;">
+                            <span style="font-size:24px;">🔄</span>
+                            <div>
+                                <p style="font-weight:700; font-size:13px;">Easy Returns</p>
+                                <p class="text-muted" style="font-size:12px;">If quality issue within 24h</p>
+                            </div>
+                        </div>
+                        <div
+                            style="background:var(--bg); border-radius:var(--radius-sm); padding:12px; display:flex; align-items:center; gap:10px;">
+                            <span style="font-size:24px;">✅</span>
+                            <div>
+                                <p style="font-weight:700; font-size:13px;">Quality Assured</p>
+                                <p class="text-muted" style="font-size:12px;">Fresh or 100% refund</p>
+                            </div>
+                        </div>
+                        <div
+                            style="background:var(--bg); border-radius:var(--radius-sm); padding:12px; display:flex; align-items:center; gap:10px;">
+                            <span style="font-size:24px;">🔒</span>
+                            <div>
+                                <p style="font-weight:700; font-size:13px;">Secure Payment</p>
+                                <p class="text-muted" style="font-size:12px;">UPI / Card / COD</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Description -->
+                    <div style="margin-bottom:24px;">
+                        <h3 style="margin-bottom:12px;">About this Product</h3>
+                        <p id="prod-desc" class="text-muted" style="line-height:1.8;">Fresh, vine-ripened tomatoes grown
+                            using traditional farming methods in the fertile soil of Nashik. Harvested at peak ripeness
+                            for maximum flavor and nutrition. No chemical preservatives used.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Reviews Section -->
+            <div style="margin-top:48px;" id="reviews">
+                <h2 style="margin-bottom:24px;">Customer Reviews</h2>
+                <div style="display:grid; grid-template-columns:280px 1fr; gap:32px; align-items:start;">
+                    <!-- Rating Summary -->
+                    <div class="card" style="padding:24px; text-align:center;">
+                        <div style="font-size:56px; font-weight:900; color:var(--primary); margin-bottom:4px;"
+                            id="avg-rating">4.8</div>
+                        <div style="color:#f59e0b; font-size:24px; margin-bottom:8px;">⭐⭐⭐⭐⭐</div>
+                        <p class="text-muted" id="total-reviews">Based on 127 reviews</p>
+                        <div style="margin-top:16px;">
+                            <div class="divider"></div>
+                            <button class="btn btn-primary w-full" onclick="showReviewForm()" style="margin-top:12px;">✍
+                                Write a Review</button>
+                        </div>
+                    </div>
+                    <!-- Review Cards -->
+                    <div id="reviews-list">
+                        <!-- JS rendered -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Write Review Modal -->
+    <div id="review-modal"
+        style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.5); z-index:999; align-items:center; justify-content:center;">
+        <div style="background:#fff; border-radius:var(--radius-lg); padding:36px; max-width:480px; width:90%;">
+            <h3 style="margin-bottom:16px;">Write a Review</h3>
+            <div style="margin-bottom:16px;">
+                <label class="form-label">Rating</label>
+                <div id="star-picker" style="display:flex; gap:8px; font-size:32px; cursor:pointer; margin-top:4px;">
+                    <span onclick="pickStar(1)">☆</span><span onclick="pickStar(2)">☆</span>
+                    <span onclick="pickStar(3)">☆</span><span onclick="pickStar(4)">☆</span><span
+                        onclick="pickStar(5)">☆</span>
+                </div>
+            </div>
+            <div class="form-group"><label class="form-label">Your Review</label><textarea class="form-control"
+                    id="review-text" rows="4" placeholder="How was the product quality?"></textarea></div>
+            <div style="display:flex; gap:12px; margin-top:16px;">
+                <button class="btn btn-primary" onclick="submitReview()">Submit Review</button>
+                <button class="btn btn-outline" onclick="closeReviewModal()">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="toast-container" id="toast-container"></div>
+    <script src="../js/cart.js"></script>
+    <script>
+        // Parse URL params
+        const params = new URLSearchParams(location.search);
+        let currentProduct = null;
+        let qty = 1;
+        let selectedStar = 5;
+
+        async function loadProduct() {
+            const params = new URLSearchParams(location.search);
+            const pName = params.get('name');
+
+            try {
+                const products = await KBApi.request('/api/products');
+                currentProduct = products.find(p => p.name === pName || p.id === pName);
+
+                if (!currentProduct) {
+                    showToast('Product not found', 'error');
+                    setTimeout(() => window.location.href = '../products.html', 1500);
+                    return;
+                }
+
+                renderProductData();
+            } catch (err) {
+                showToast('Failed to load product details', 'error');
+            }
+        }
+
+        function renderProductData() {
+            document.title = currentProduct.name + ' — KisanBazaar';
+            document.getElementById('prod-name').textContent = currentProduct.name;
+            document.getElementById('breadcrumb-name').textContent = currentProduct.name;
+            document.getElementById('prod-price').textContent = '₹' + currentProduct.price;
+            document.getElementById('prod-unit').textContent = '/' + currentProduct.unit;
+            document.getElementById('unit-label').textContent = currentProduct.unit;
+            document.getElementById('prod-category').textContent = currentProduct.cat || currentProduct.category;
+            document.getElementById('prod-rating').textContent = currentProduct.rating || '4.5';
+            document.getElementById('prod-reviews').textContent = '(' + (currentProduct.reviews || 0) + ' reviews)';
+            document.getElementById('avg-rating').textContent = currentProduct.rating || '4.5';
+            document.getElementById('total-reviews').textContent = 'Based on ' + (currentProduct.reviews || 0) + ' reviews';
+            document.getElementById('prod-desc').textContent = currentProduct.desc || 'Fresh produce directly from the farm. Quality guaranteed.';
+
+            const emojiBox = document.getElementById('product-emoji-box');
+            if (currentProduct.emoji) {
+                emojiBox.textContent = currentProduct.emoji;
+                document.getElementById('thumb1').textContent = currentProduct.emoji;
+            } else if (currentProduct.img) {
+                const imgPath = currentProduct.img.startsWith('../') ? currentProduct.img : '../' + currentProduct.img;
+                const filterStyle = `filter: ${currentProduct.filter || 'none'};`;
+                emojiBox.innerHTML = `<img src="${imgPath}" style="max-height:80%; max-width:80%; object-fit:contain; ${filterStyle}" />`;
+                document.getElementById('thumb1').innerHTML = `<img src="${imgPath}" style="max-height:80%; max-width:80%; object-fit:contain; ${filterStyle}" />`;
+            }
+
+            document.getElementById('farmer-name').textContent = currentProduct.farmer || 'Verified Farmer';
+            document.getElementById('farmer-region').textContent = '📍 ' + (currentProduct.region || 'Maharashtra');
+            document.getElementById('farmer-avatar').textContent = (currentProduct.farmer || 'V')[0];
+
+            if (currentProduct.organic) document.getElementById('prod-organic-badge').style.display = 'inline-block';
+
+            updateLineTotal();
+            renderReviews();
+        }
+
+        function changeQty(delta) {
+            qty = Math.max(1, qty + delta);
+            document.getElementById('qty-display').textContent = qty;
+            updateLineTotal();
+        }
+
+        function updateLineTotal() {
+            if (!currentProduct) return;
+            document.getElementById('line-total').textContent = '₹' + (currentProduct.price * qty);
+        }
+
+        function addToCartNow() {
+            Cart.addItem(currentProduct.name, currentProduct.price, currentProduct.unit, currentProduct.farmer || 'Farmer', currentProduct.emoji || '', currentProduct.id, currentProduct.img || '');
+            const btn = event.target;
+            btn.textContent = '✅ Added!';
+            setTimeout(() => btn.textContent = '🛒 Add to Cart', 1500);
+        }
+
+        function buyNow() {
+            Cart.addItem(currentProduct.name, currentProduct.price, currentProduct.unit, currentProduct.farmer || 'Farmer', currentProduct.emoji || '', currentProduct.id, currentProduct.img || '');
+            window.location.href = 'checkout.html';
+        }
+
+        function selectThumb(i) {
+            const emojis = [currentProduct.emoji || '📦', '🌿', '📦'];
+            if (currentProduct.emoji) {
+                document.getElementById('product-emoji-box').textContent = emojis[i];
+            }
+            ['thumb1', 'thumb2', 'thumb3'].forEach((id, j) => {
+                document.getElementById(id).style.borderColor = i === j ? 'var(--primary)' : 'transparent';
+            });
+        }
+
+        function toggleWishlist(btn) {
+            const inWishlist = btn.textContent === '♥';
+            btn.textContent = inWishlist ? '♡' : '♥';
+            btn.style.color = inWishlist ? '' : 'var(--error)';
+            showToast(inWishlist ? 'Removed from wishlist' : '❤ Added to wishlist!', inWishlist ? '' : 'success');
+        }
+
+        /* Reviews */
+        const SAMPLE_REVIEWS = [
+            { name: 'Priya Sharma', rating: 5, text: 'Absolutely fresh! Arrived in perfect condition. Will buy again.', date: 'Mar 8, 2025' },
+            { name: 'Amit Kumar', rating: 5, text: 'Quality is outstanding. You can taste the difference from store-bought.', date: 'Mar 6, 2025' },
+            { name: 'Sonal Patel', rating: 4, text: 'Very fresh produce. Delivery was fast and packaging was good.', date: 'Mar 3, 2025' },
+            { name: 'Ravi Mehra', rating: 5, text: 'Best produce I have ever tasted! Highly recommend.', date: 'Feb 28, 2025' },
+        ];
+        let allReviews = [...SAMPLE_REVIEWS];
+
+        function renderReviews() {
+            const container = document.getElementById('reviews-list');
+            if (!container) return;
+            container.innerHTML = '';
+            allReviews.forEach(r => {
+                container.insertAdjacentHTML('beforeend', `
+        <div class="card" style="padding:20px; margin-bottom:16px;">
+          <div style="display:flex; align-items:center; gap:12px; margin-bottom:12px;">
+            <div style="width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,var(--primary),var(--primary-light));display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;">${r.name[0]}</div>
+            <div>
+              <p style="font-weight:700; margin-bottom:2px;">${r.name}</p>
+              <div style="display:flex; gap:4px; align-items:center;">
+                <span style="color:#f59e0b;">${'⭐'.repeat(r.rating)}</span>
+                <span class="text-muted" style="font-size:12px;">· ${r.date}</span>
+              </div>
+            </div>
+          </div>
+          <p style="color:var(--text-muted); font-size:15px; line-height:1.6;">${r.text}</p>
+        </div>
+      `);
+            });
+        }
+
+        function showReviewForm() {
+            document.getElementById('review-modal').style.display = 'flex';
+        }
+
+        function closeReviewModal() {
+            document.getElementById('review-modal').style.display = 'none';
+        }
+
+        function pickStar(n) {
+            selectedStar = n;
+            const stars = document.querySelectorAll('#star-picker span');
+            stars.forEach((s, i) => s.textContent = i < n ? '⭐' : '☆');
+        }
+
+        function submitReview() {
+            const text = document.getElementById('review-text').value.trim();
+            if (!text) { showToast('⚠ Please write your review first.', 'error'); return; }
+            allReviews.unshift({ name: 'You', rating: selectedStar, text, date: new Date().toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' }) });
+            renderReviews();
+            closeReviewModal();
+            showToast('✅ Review submitted! Thank you.', 'success');
+            document.getElementById('review-text').value = '';
+        }
+
+        document.addEventListener('DOMContentLoaded', loadProduct);
+    </script>
+    <script src="../js/app.js"></script>
+</body>
+
+</html>

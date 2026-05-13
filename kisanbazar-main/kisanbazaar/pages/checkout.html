@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Checkout — KisanBazaar</title>
+    <link rel="stylesheet" href="../css/style.css" />
+</head>
+
+<body>
+
+    <nav class="navbar">
+        <a href="../index.html" class="navbar-brand">🌿 KisanBazaar</a>
+        <div class="navbar-actions">
+            <a href="cart.html" class="btn btn-outline btn-sm">← Back to Cart</a>
+        </div>
+    </nav>
+
+    <!-- Progress Steps -->
+    <div style="background:#fff; border-bottom:1px solid var(--border); padding:16px 24px;">
+        <div class="container" style="display:flex; align-items:center; justify-content:center; gap:0;">
+            <div style="display:flex; align-items:center; gap:8px; color:var(--primary); font-weight:700;">
+                <div
+                    style="width:32px;height:32px;border-radius:50%;background:var(--primary);color:#fff;display:flex;align-items:center;justify-content:center;font-size:14px;">
+                    ✓</div>
+                <span style="font-size:14px;">Cart</span>
+            </div>
+            <div style="width:60px;height:2px;background:var(--primary); margin:0 8px;"></div>
+            <div style="display:flex; align-items:center; gap:8px; color:var(--primary); font-weight:700;">
+                <div
+                    style="width:32px;height:32px;border-radius:50%;background:var(--primary);color:#fff;display:flex;align-items:center;justify-content:center;font-size:14px;">
+                    2</div>
+                <span style="font-size:14px;">Delivery</span>
+            </div>
+            <div style="width:60px;height:2px;background:var(--border); margin:0 8px;"></div>
+            <div style="display:flex; align-items:center; gap:8px; color:var(--text-muted);">
+                <div
+                    style="width:32px;height:32px;border-radius:50%;background:var(--border);color:var(--text-muted);display:flex;align-items:center;justify-content:center;font-size:14px;">
+                    3</div>
+                <span style="font-size:14px;">Payment</span>
+            </div>
+            <div style="width:60px;height:2px;background:var(--border); margin:0 8px;"></div>
+            <div style="display:flex; align-items:center; gap:8px; color:var(--text-muted);">
+                <div
+                    style="width:32px;height:32px;border-radius:50%;background:var(--border);color:var(--text-muted);display:flex;align-items:center;justify-content:center;font-size:14px;">
+                    4</div>
+                <span style="font-size:14px;">Confirm</span>
+            </div>
+        </div>
+    </div>
+
+    <section>
+        <div class="container">
+            <div class="cart-layout">
+                <!-- Left: Form -->
+                <div>
+                    <!-- Step 1: Delivery Address -->
+                    <div class="card" style="padding:28px; margin-bottom:24px;" id="step-delivery">
+                        <h3 style="margin-bottom:20px;">📍 Delivery Address</h3>
+
+                        <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px;">
+                            <div class="form-group">
+                                <label class="form-label">First Name *</label>
+                                <input type="text" class="form-control" id="fname" placeholder="Priya" value="Priya"
+                                    required />
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Last Name *</label>
+                                <input type="text" class="form-control" id="lname" placeholder="Sharma" value="Sharma"
+                                    required />
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Mobile Number *</label>
+                            <input type="tel" class="form-control" id="mobile" placeholder="9876543210"
+                                value="9876543210" required />
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Address Line 1 *</label>
+                            <input type="text" class="form-control" id="addr1"
+                                placeholder="Flat/House no. and Building name" value="Flat 403, Green Valley Apartments"
+                                required />
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Address Line 2</label>
+                            <input type="text" class="form-control" id="addr2" placeholder="Street, Locality"
+                                value="Andheri West" />
+                        </div>
+
+                        <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:16px;">
+                            <div class="form-group">
+                                <label class="form-label">City *</label>
+                                <input type="text" class="form-control" id="city" placeholder="Mumbai" value="Mumbai"
+                                    required />
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">State *</label>
+                                <select class="form-control" id="state">
+                                    <option>Maharashtra</option>
+                                    <option>Gujarat</option>
+                                    <option>Delhi</option>
+                                    <option>Karnataka</option>
+                                    <option>Rajasthan</option>
+                                    <option>Punjab</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">PIN Code *</label>
+                                <input type="text" class="form-control" id="pin" placeholder="400053" value="400053"
+                                    required />
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Step 2: Payment -->
+                    <div class="card" style="padding:28px; margin-bottom:24px;">
+                        <h3 style="margin-bottom:20px;">💳 Payment Method</h3>
+
+                        <div style="display:flex; flex-direction:column; gap:12px;" id="payment-options">
+                            <label id="payopt-upi" class="pay-option active" onclick="selectPayment('upi')"
+                                style="display:flex;align-items:center;gap:16px;padding:16px 20px;border:2px solid var(--primary);border-radius:var(--radius-sm);cursor:pointer;background:rgba(46,125,50,0.04);">
+                                <input type="radio" name="payment" value="upi" checked
+                                    style="accent-color:var(--primary); width:18px;height:18px;" />
+                                <div>
+                                    <div style="font-weight:700; margin-bottom:2px;">📱 UPI Payment</div>
+                                    <div class="text-muted" style="font-size:13px;">Google Pay, PhonePe, Paytm, BHIM UPI
+                                    </div>
+                                </div>
+                            </label>
+
+                            <label id="payopt-card" class="pay-option" onclick="selectPayment('card')"
+                                style="display:flex;align-items:center;gap:16px;padding:16px 20px;border:2px solid var(--border);border-radius:var(--radius-sm);cursor:pointer;">
+                                <input type="radio" name="payment" value="card"
+                                    style="accent-color:var(--primary); width:18px;height:18px;" />
+                                <div>
+                                    <div style="font-weight:700; margin-bottom:2px;">💳 Debit / Credit Card</div>
+                                    <div class="text-muted" style="font-size:13px;">Visa, Mastercard, RuPay accepted
+                                    </div>
+                                </div>
+                            </label>
+
+                            <label id="payopt-cod" class="pay-option" onclick="selectPayment('cod')"
+                                style="display:flex;align-items:center;gap:16px;padding:16px 20px;border:2px solid var(--border);border-radius:var(--radius-sm);cursor:pointer;">
+                                <input type="radio" name="payment" value="cod"
+                                    style="accent-color:var(--primary); width:18px;height:18px;" />
+                                <div>
+                                    <div style="font-weight:700; margin-bottom:2px;">💵 Cash on Delivery</div>
+                                    <div class="text-muted" style="font-size:13px;">Pay when your order arrives</div>
+                                </div>
+                            </label>
+                        </div>
+
+                        <!-- UPI Input -->
+                        <div id="upi-section" style="margin-top:16px;">
+                            <label class="form-label">UPI ID</label>
+                            <input type="text" class="form-control" id="upi-id"
+                                placeholder="name@upi or 9876543210@paytm" />
+                        </div>
+                        <!-- Card section (hidden) -->
+                        <div id="card-section" style="margin-top:16px; display:none;">
+                            <div class="form-group">
+                                <label class="form-label">Card Number</label>
+                                <input type="text" class="form-control" id="card-num" placeholder="1234 5678 9012 3456"
+                                    maxlength="19" oninput="formatCard(this)" />
+                            </div>
+                            <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px;">
+                                <div class="form-group">
+                                    <label class="form-label">Expiry (MM/YY)</label>
+                                    <input type="text" class="form-control" id="expiry" placeholder="12/27"
+                                        maxlength="5" />
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">CVV</label>
+                                    <input type="password" class="form-control" id="cvv" placeholder="•••"
+                                        maxlength="3" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Delivery slot -->
+                    <div class="card" style="padding:28px; margin-bottom:24px;">
+                        <h3 style="margin-bottom:16px;">🚚 Preferred Delivery Slot</h3>
+                        <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+                            <label id="slot-morn" onclick="selectSlot('morn')"
+                                style="padding:16px;border:2px solid var(--primary);border-radius:var(--radius-sm);cursor:pointer;background:rgba(46,125,50,0.04);text-align:center;">
+                                <div style="font-size:28px;">🌅</div>
+                                <div style="font-weight:700;">Morning</div>
+                                <div class="text-muted" style="font-size:13px;">7:00 AM – 11:00 AM</div>
+                            </label>
+                            <label id="slot-eve" onclick="selectSlot('eve')"
+                                style="padding:16px;border:2px solid var(--border);border-radius:var(--radius-sm);cursor:pointer;text-align:center;">
+                                <div style="font-size:28px;">🌆</div>
+                                <div style="font-weight:700;">Evening</div>
+                                <div class="text-muted" style="font-size:13px;">4:00 PM – 8:00 PM</div>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right: Order Summary -->
+                <div>
+                    <div class="card" style="padding:24px; position:sticky; top:88px;">
+                        <h3 style="margin-bottom:20px;">Order Summary</h3>
+                        <div id="checkout-items"></div>
+                        <div class="divider"></div>
+                        <div style="margin:12px 0;">
+                            <div style="display:flex;justify-content:space-between;margin-bottom:8px;"><span
+                                    class="text-muted">Subtotal</span><span id="co-sub"
+                                    style="font-weight:700;">₹0</span></div>
+                            <div style="display:flex;justify-content:space-between;margin-bottom:8px;"><span
+                                    class="text-muted">Delivery</span><span
+                                    style="color:var(--success);font-weight:600;">FREE</span></div>
+                            <div style="display:flex;justify-content:space-between;margin-bottom:8px;"><span
+                                    class="text-muted">Platform fee</span><span style="font-weight:600;">₹20</span>
+                            </div>
+                        </div>
+                        <div class="divider"></div>
+                        <div
+                            style="display:flex;justify-content:space-between;margin:16px 0;font-size:22px;font-weight:800;">
+                            <span>Total</span><span id="co-total" style="color:var(--primary);">₹0</span>
+                        </div>
+                        <button class="btn btn-primary w-full btn-lg" onclick="placeOrder()" id="place-btn"
+                            style="justify-content:center; font-size:16px;">
+                            🔒 Place Order Securely
+                        </button>
+                        <p style="text-align:center; font-size:12px; color:var(--text-muted); margin-top:12px;">
+                            🔒 256-bit SSL encrypted · ₹0 extra charges
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Success Modal -->
+    <div id="success-modal"
+        style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.5); z-index:999; display:flex; align-items:center; justify-content:center; display:none;">
+        <div
+            style="background:#fff; border-radius:var(--radius-lg); padding:48px; max-width:440px; width:90%; text-align:center; box-shadow:var(--shadow-lg);">
+            <div style="font-size:72px; margin-bottom:16px;">🎉</div>
+            <h2 style="margin-bottom:12px; color:var(--primary);">Order Placed!</h2>
+            <p class="text-muted" style="margin-bottom:8px;">Your order has been confirmed and the farmer has been
+                notified.</p>
+            <p style="font-weight:700; color:var(--primary); font-size:18px; margin-bottom:24px;" id="modal-order-id">
+                #KB2342</p>
+            <div
+                style="background:rgba(46,125,50,0.06); border-radius:var(--radius-sm); padding:16px; margin-bottom:24px; font-size:14px; color:var(--text-muted);">
+                🚚 Expected delivery: <strong id="modal-eta" style="color:var(--text);">Tomorrow, 7–11 AM</strong>
+            </div>
+            <div style="display:flex; gap:12px; justify-content:center;">
+                <a href="order-tracking.html" class="btn btn-primary">📍 Track Order</a>
+                <a href="../index.html" class="btn btn-outline">🏠 Go Home</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="toast-container" id="toast-container"></div>
+    <script src="../js/cart.js"></script>
+    <script>
+        let selectedPayment = 'upi';
+        let selectedSlot = 'morn';
+
+        /* ── Render cart items ──────────────────────────────────── */
+        function renderSummary() {
+            const items = Cart.getAll();
+            const container = document.getElementById('checkout-items');
+            let sub = 0;
+            container.innerHTML = '';
+            if (items.length === 0) {
+                container.innerHTML = '<p class="text-muted" style="font-size:14px; margin-bottom:16px;">Your cart is empty. <a href="../products.html" style="color:var(--primary);">Add items</a></p>';
+            } else {
+                items.forEach(i => {
+                    const line = i.price * i.qty;
+                    sub += line;
+                    container.insertAdjacentHTML('beforeend', `
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;font-size:14px;">
+            <span>${i.emoji} ${i.name} × ${i.qty}</span>
+            <span style="font-weight:700;">₹${line}</span>
+          </div>
+        `);
+                });
+            }
+            document.getElementById('co-sub').textContent = '₹' + sub;
+            document.getElementById('co-total').textContent = '₹' + (sub + 20);
+        }
+
+        /* ── Payment method ─────────────────────────────────────── */
+        function selectPayment(type) {
+            selectedPayment = type;
+            ['upi', 'card', 'cod'].forEach(t => {
+                const el = document.getElementById('payopt-' + t);
+                if (el) {
+                    el.style.borderColor = t === type ? 'var(--primary)' : 'var(--border)';
+                    el.style.background = t === type ? 'rgba(46,125,50,0.04)' : '';
+                }
+            });
+            document.getElementById('upi-section').style.display = type === 'upi' ? 'block' : 'none';
+            document.getElementById('card-section').style.display = type === 'card' ? 'block' : 'none';
+        }
+
+        /* ── Delivery slot ──────────────────────────────────────── */
+        function selectSlot(slot) {
+            selectedSlot = slot;
+            ['morn', 'eve'].forEach(s => {
+                const el = document.getElementById('slot-' + s);
+                if (el) {
+                    el.style.borderColor = s === slot ? 'var(--primary)' : 'var(--border)';
+                    el.style.background = s === slot ? 'rgba(46,125,50,0.04)' : '';
+                }
+            });
+        }
+
+        /* ── Card formatter ─────────────────────────────────────── */
+        function formatCard(input) {
+            input.value = input.value.replace(/[^0-9]/g, '').replace(/(.{4})/g, '$1 ').trim();
+        }
+
+        /* ── Place order ────────────────────────────────────────── */
+        async function placeOrder() {
+            const user = KBSession.getUser();
+            if (!user) {
+                showToast('Please sign in to place an order', 'error');
+                setTimeout(() => window.location.href = 'login.html', 1500);
+                return;
+            }
+
+            const fname = document.getElementById('fname').value.trim();
+            const mobile = document.getElementById('mobile').value.trim();
+            const addr1 = document.getElementById('addr1').value.trim();
+            const city = document.getElementById('city').value.trim();
+            const pin = document.getElementById('pin').value.trim();
+
+            if (!fname || !mobile || !addr1 || !city || !pin) {
+                showToast('⚠ Please fill all required delivery address fields.', 'error');
+                document.getElementById('step-delivery').scrollIntoView({ behavior: 'smooth' });
+                return;
+            }
+
+            const items = Cart.getAll();
+            if (items.length === 0) {
+                showToast('⚠ Your cart is empty!', 'error');
+                return;
+            }
+
+            const btn = document.getElementById('place-btn');
+            btn.textContent = '⏳ Processing…';
+            btn.disabled = true;
+
+            const orderData = {
+                userId: user.id,
+                userName: user.name,
+                items: items,
+                total: Cart.getTotal() + 20,
+                address: `${fname}, ${addr1}, ${city} - ${pin}`,
+                payment: selectedPayment,
+                slot: selectedSlot,
+                eta: selectedSlot === 'morn' ? 'Tomorrow, 7–11 AM' : 'Tomorrow, 4–8 PM'
+            };
+
+            try {
+                const res = await KBApi.request('/api/orders', 'POST', orderData);
+                if (res.success) {
+                    const order = res.order;
+                    document.getElementById('modal-order-id').textContent = '#' + order.id.slice(-6).toUpperCase();
+                    document.getElementById('modal-eta').textContent = order.eta;
+                    Cart.clear();
+                    document.getElementById('success-modal').style.display = 'flex';
+                }
+            } catch (err) {
+                showToast(err.message, 'error');
+                btn.textContent = '🔒 Place Order Securely';
+                btn.disabled = false;
+            }
+        }
+
+        /* ── Init ───────────────────────────────────────────────── */
+        document.addEventListener('DOMContentLoaded', renderSummary);
+    </script>
+    <script src="../js/app.js"></script>
+</body>
+
+</html>

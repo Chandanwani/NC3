@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>KisanBazaar — Farm Fresh Direct to You</title>
+  <meta name="description"
+    content="Connect directly with farmers. Buy fresh produce, grains, and organic food straight from the source." />
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="icon"
+    href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌾</text></svg>" />
+</head>
+
+<body>
+
+  <!-- ── NAVBAR ─────────────────────────────────────────────── -->
+  <nav class="navbar">
+    <a href="index.html" class="navbar-brand">🌿 KisanBazaar</a>
+    <ul class="navbar-nav">
+      <li><a href="index.html" class="active">Home</a></li>
+      <li><a href="products.html">Products</a></li>
+    </ul>
+    <div class="navbar-actions">
+      <a href="pages/login.html" class="btn btn-primary btn-sm">Sign In</a>
+      <a href="pages/buyer-register.html" class="btn btn-outline btn-sm">Register</a>
+    </div>
+  </nav>
+  <!-- ── HERO SECTION ───────────────────────────────────────── -->
+  <header class="hero" style="min-height:80vh; overflow:hidden; display:flex; align-items:center; position:relative;">
+    <div class="video-container">
+      <video autoplay muted loop playsinline id="hero-video">
+        <source src="images/background_video.mp4" type="video/mp4">
+      </video>
+    </div>
+    <div id="leaf-container" style="position:absolute; inset:0; pointer-events:none; overflow:hidden; z-index:1;"></div>
+    <div class="container"
+      style="display:flex; align-items:center; gap:80px; padding:60px 0; position:relative; z-index:2;">
+      <!-- Hero Left: Circular Image -->
+      <div style="flex:1.2;">
+        <div class="hero-composition">
+          <div class="hero-main-circle">
+            <img src="images/produce_basket.png" alt="Fresh Produce Basket">
+          </div>
+        </div>
+      </div>
+
+      <!-- Hero Right: Brand Text -->
+      <div class="hero-text-content" style="flex:1; transform: translateY(-56px); transition: transform 0.5s ease;">
+
+        <h1>AGRICULTURE</h1>
+        <h2>FARM FRESH DIRECT</h2>
+
+        <div class="hero-actions" style="display:flex; align-items:center; gap:20px;">
+          <a href="#categories-section" class="btn btn-primary">Start Browsing</a>
+          <a href="products.html" style="color:#5D723B; font-weight:700; text-decoration:none;">View All Products →</a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- ── CATEGORIES SECTION (Immediate after scroll) ──────────────── -->
+    <section id="categories-section" class="section bg-light" style="padding:100px 0;">
+      <div class="container">
+        <div class="section-header" style="text-align:center; margin-bottom:60px;">
+          <h2 style="font-size:48px; font-weight:900; color:#000;">Browse Categories</h2>
+          <p style="font-size:20px; color:#666;">From fresh vegetables to organic grains — all sourced directly from
+            farms</p>
+        </div>
+        <div id="categories-grid"></div>
+      </div>
+    </section>
+
+    <!-- ── PRODUCTS SECTION ────────────────────────────────────────── -->
+    <section id="products-section" class="section" style="padding:60px 0;">
+      <div class="container" style="position:relative; margin-top: -60px; padding-bottom: 60px;">
+        <!-- Popular Header -->
+        <div style="margin-bottom: 32px; display: flex; justify-content: space-between; align-items: flex-end;">
+          <div>
+            <h3
+              style="font-family:'DM Sans', sans-serif; font-size:38px; font-weight:900; color:#1a1a1a; margin-bottom:8px; letter-spacing: -1px;">
+              🔥 Popular This Week</h3>
+            <p style="color:#666; font-size:18px; font-weight: 500;">Handpicked fresh finds that our community loves</p>
+          </div>
+          <a href="products.html"
+            style="color: #2E7D32; font-weight: 700; text-decoration: none; display: flex; align-items: center; gap: 8px; font-size: 15px; margin-bottom: 8px;">
+            View All <span style="font-size: 20px;">→</span>
+          </a>
+        </div>
+
+        <!-- Popular Grid (JS Rendered as Scrollable) -->
+        <div id="products-grid">
+          <!-- Will be populated by main.js with .popular-categories-wrapper class -->
+        </div>
+      </div>
+    </section>
+
+    <!-- ── HOW IT WORKS (REDESIGNED) ────────────────────────── -->
+    <section style="padding: 100px 0; background: #fff;">
+      <div class="container">
+        <div class="section-header" style="text-align:center; margin-bottom:60px;">
+          <h2 style="font-size:48px; font-weight:900; color:#000;">How KisanBazaar Works</h2>
+          <p style="font-size:20px; color:#666;">Simple. Transparent. Fair.</p>
+        </div>
+
+        <div class="how-it-works-grid" style="display: flex; flex-direction: column; gap: 24px;">
+
+          <!-- Step 1: Farmer Lists -->
+          <div class="how-step-card"
+            style="background: var(--bg-soft-purple); border-radius:32px; padding:60px 80px; display:flex; align-items:center; gap:60px; box-shadow: 0 10px 40px rgba(160, 106, 210, 0.15);">
+            <div
+              style="flex:0 0 160px; height:160px; background:#fff; border-radius:32px; display:flex; align-items:center; justify-content:center; box-shadow:0 15px 35px rgba(0,0,0,0.05); transform:rotate(-5deg);">
+              <span class="how-step-icon">👨‍🌾</span>
+            </div>
+            <div style="flex:1;">
+              <h3 style="font-size:32px; font-weight:900; color:#000; margin-bottom:12px;">1. Farmer Lists</h3>
+              <p style="font-size:18px; color:#666; max-width:500px; line-height:1.4;">Farmers add produce with photos
+                and pricing directly.</p>
+            </div>
+          </div>
+
+          <!-- Step 2: Buyer Discovers -->
+          <div class="how-step-card"
+            style="background: var(--bg-soft-red); border-radius:32px; padding:60px 80px; display:flex; align-items:center; gap:60px; box-shadow: 0 10px 40px rgba(240, 109, 109, 0.15);">
+            <div
+              style="flex:0 0 160px; height:160px; background:#fff; border-radius:32px; display:flex; align-items:center; justify-content:center; box-shadow:0 15px 35px rgba(0,0,0,0.05); transform:rotate(5deg);">
+              <span class="how-step-icon">🔍</span>
+            </div>
+            <div style="flex:1;">
+              <h3 style="font-size:32px; font-weight:900; color:#000; margin-bottom:12px;">2. Buyer Discovers</h3>
+              <p style="font-size:18px; color:#666; max-width:500px; line-height:1.4;">Browse verified farmer profiles
+                and fresh produce listings.</p>
+            </div>
+          </div>
+
+          <!-- Step 3: Easy Order -->
+          <div class="how-step-card"
+            style="background: var(--bg-soft-yellow); border-radius:32px; padding:60px 80px; display:flex; align-items:center; gap:60px; box-shadow: 0 10px 40px rgba(245, 176, 65, 0.15);">
+            <div
+              style="flex:0 0 160px; height:160px; background:#fff; border-radius:32px; display:flex; align-items:center; justify-content:center; box-shadow:0 15px 35px rgba(0,0,0,0.05); transform:rotate(-3deg);">
+              <span class="how-step-icon">🛒</span>
+            </div>
+            <div style="flex:1;">
+              <h3 style="font-size:32px; font-weight:900; color:#000; margin-bottom:12px;">3. Easy Order</h3>
+              <p style="font-size:18px; color:#666; max-width:500px; line-height:1.4;">Place orders with secure payments
+                and instant confirmation.</p>
+            </div>
+          </div>
+
+          <!-- Step 4: Fast Delivery -->
+          <div class="how-step-card"
+            style="background: var(--bg-soft-blue); border-radius:32px; padding:60px 80px; display:flex; align-items:center; gap:60px; box-shadow: 0 10px 40px rgba(0, 80, 255, 0.1);">
+            <div
+              style="flex:0 0 160px; height:160px; background:#fff; border-radius:32px; display:flex; align-items:center; justify-content:center; box-shadow:0 15px 35px rgba(0,0,0,0.05); transform:rotate(3deg);">
+              <span class="how-step-icon">🚚</span>
+            </div>
+            <div style="flex:1;">
+              <h3 style="font-size:32px; font-weight:900; color:#000; margin-bottom:12px;">4. Fast Delivery</h3>
+              <p style="font-size:18px; color:#666; max-width:500px; line-height:1.4;">Fresh produce delivered to your
+                door within 24–48 hours.</p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ── STATISTICS SECTION ──────────────────────────────────── -->
+    <section class="stats-section section">
+      <div class="container">
+        <div class="stats-grid">
+          <div class="stat-item">
+            <span class="stat-number" data-target="50000">0</span>
+            <span class="stat-label">Farmers Connected</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-number" data-target="120000">0</span>
+            <span class="stat-label">Products Delivered</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-number" data-target="4.9">0</span>
+            <span class="stat-label">Average Rating</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-number" data-target="25">0</span>
+            <span class="stat-label">States Covered</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── TESTIMONIALS SECTION ────────────────────────────────── -->
+    <section class="testimonials-section section">
+      <div class="container">
+        <div class="section-header">
+          <h2 style="color: var(--primary-dark);">Words from the Field</h2>
+          <p>Real stories from our farmers and buyers across India.</p>
+        </div>
+        <div class="testimonial-container" id="testimonial-slider">
+          <!-- Slide 1 -->
+          <div class="testimonial-slide active">
+            <p class="testimonial-content">"KisanBazaar changed how I sell my onions. No more middlemen bargaining. I
+              get the price I deserve, and my customers get them fresh."</p>
+            <div class="testimonial-author">
+              <img
+                src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23666'%3E%3Cpath d='M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08s5.97 1.09 6 3.08c-1.29 1.94-3.5 3.22-6 3.22z'/%3E%3C/svg%3E"
+                alt="Avatar" class="author-img">
+              <div class="author-info">
+                <h4>Rajesh Kumar</h4>
+                <p>Onion Farmer, Nashik</p>
+              </div>
+            </div>
+          </div>
+          <!-- Slide 2 -->
+          <div class="testimonial-slide">
+            <p class="testimonial-content">"The quality of organic grains here is unmatched. I love knowing exactly
+              which farm my food comes from. It feels more personal and trustworthy."</p>
+            <div class="testimonial-author">
+              <img
+                src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%232E7D32'%3E%3Cpath d='M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08s5.97 1.09 6 3.08c-1.29 1.94-3.5 3.22-6 3.22z'/%3E%3C/svg%3E"
+                alt="Avatar" class="author-img">
+              <div class="author-info">
+                <h4>Ananya Sharma</h4>
+                <p>Organic Food Enthusiast, Pune</p>
+              </div>
+            </div>
+          </div>
+          <!-- Slide 3 -->
+          <div class="testimonial-slide">
+            <p class="testimonial-content">"Fast delivery and secure payments. As a bulk buyer for my restaurant,
+              KisanBazaar has become my primary sourcing partner."</p>
+            <div class="testimonial-author">
+              <img
+                src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%231565C0'%3E%3Cpath d='M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08s5.97 1.09 6 3.08c-1.29 1.94-3.5 3.22-6 3.22z'/%3E%3C/svg%3E"
+                alt="Avatar" class="author-img">
+              <div class="author-info">
+                <h4>Chef Vikram</h4>
+                <p>Green Plate Restaurant, Mumbai</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+
+    <!-- ── FOOTER ──────────────────────────────────────────────── -->
+    <footer>
+      <div class="footer-grid">
+        <div>
+          <div class="footer-brand">🌿 KisanBazaar</div>
+          <p style="font-size:14px; line-height:1.7; max-width:280px; margin-bottom:16px;">Connecting India's farmers
+            directly with consumers. Fair prices, fresh produce, zero middlemen.</p>
+          <p style="font-size:12px; color:rgba(255,255,255,0.4);">📍 Akurdi, Pune, Maharashtra 411044</p>
+        </div>
+        <div>
+          <h5>For Buyers</h5>
+          <ul>
+            <li><a href="products.html">Browse Products</a></li>
+            <li><a href="pages/cart.html">My Cart</a></li>
+            <li><a href="pages/order-tracking.html">Track Order</a></li>
+            <li><a href="pages/buyer-dashboard.html">My Account</a></li>
+          </ul>
+        </div>
+        <div>
+          <h5>For Farmers</h5>
+          <ul>
+            <li><a href="pages/farmer-register.html">Join Now</a></li>
+            <li><a href="pages/farmer-dashboard.html">Dashboard</a></li>
+            <li><a href="pages/add-product.html">Add Product</a></li>
+          </ul>
+        </div>
+        <div>
+          <h5>Support</h5>
+          <ul>
+            <li><a href="#">Help Centre</a></li>
+            <li><a href="#">Contact Us</a></li>
+            <li><a href="#">Privacy Policy</a></li>
+            <li><a href="#">Terms of Service</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-copy">© 2025 KisanBazaar — Made with 💚 for Indian Farmers</div>
+    </footer>
+
+    <div class="toast-container" id="toast-container"></div>
+
+    <script src="js/cart.js"></script>
+    <script src="js/app.js"></script>
+    <script src="js/main.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Products — KisanBazaar</title>
+    <link rel="stylesheet" href="css/style.css" />
+</head>
+
+<body>
+
+    <nav class="navbar">
+        <div class="navbar-brand-group">
+            <div class="navbar-location">Nashik / Maharashtra</div>
+            <a href="index.html" class="navbar-brand">🌿 KisanBazaar</a>
+        </div>
+
+        <div class="navbar-capsule">
+            <ul class="navbar-nav">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="products.html" class="active">Products</a></li>
+                <li><a href="pages/farmer-dashboard.html">Sell</a></li>
+                <li><a href="pages/login.html" id="nav-login-btn">Login</a></li>
+            </ul>
+            <div class="nav-socials">
+                <a href="pages/cart.html" style="text-decoration:none;">🛒 <span class="cart-count">0</span></a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Filter bar -->
+    <div
+        style="background:#fff; border-bottom:1px solid var(--border); padding:16px 24px; position:sticky; top:68px; z-index:50;">
+        <div class="container" style="display:flex; align-items:center; gap:12px; flex-wrap:wrap;">
+            <input type="text" id="search-input" class="form-control" placeholder="🔍 Search products…"
+                style="max-width:320px; margin-bottom:0;" oninput="filterProducts()" />
+            <select id="category-select" class="form-control" style="max-width:200px; margin-bottom:0;"
+                onchange="filterProducts()">
+                <option value="">All Categories</option>
+                <option>Vegetables</option>
+                <option>Fruits</option>
+                <option>Grains</option>
+                <option>Pulses</option>
+                <option>Dairy</option>
+                <option>Organic</option>
+                <option>Spices</option>
+            </select>
+            <select id="sort-select" class="form-control" style="max-width:180px; margin-bottom:0;"
+                onchange="filterProducts()">
+                <option value="popular">Sort: Popular</option>
+                <option value="price-low">Price: Low to High</option>
+                <option value="price-high">Price: High to Low</option>
+                <option value="rating">Best Rating</option>
+            </select>
+            <span id="result-count" class="text-muted" style="font-size:14px; margin-left:auto;"></span>
+        </div>
+    </div>
+
+    <section>
+        <div class="container">
+            <!-- Popular Products Section -->
+            <div id="popular-products-section"
+                style="margin-bottom: 40px; border-radius: 20px; overflow: hidden; background: #fff; box-shadow: 0 4px 20px rgba(0,0,0,0.05);">
+                <div class="popular-banner" style="
+                  width: 100%;
+                  height: 200px;
+                  border-radius: 16px;
+                  background: linear-gradient(rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.2)), url('images/popular_banner_v2.png');
+                  background-size: cover;
+                  background-position: center;
+                  display: flex;
+                  align-items: flex-end;
+                  padding: 30px;
+                  position: relative;
+                  overflow: hidden;
+                  box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+                ">
+                    <div>
+                        <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 4px;">
+                            <span style="font-size: 20px;">🔥</span>
+                            <h3
+                                style="font-size: 28px; font-weight: 900; color: #000; margin: 0; text-shadow: 0 2px 4px rgba(255,255,255,0.8);">
+                                Popular This Week</h3>
+                        </div>
+                        <p style="font-size: 16px; color: #333; margin: 0; font-weight: 600;">Fresh finds that others
+                            are loving
+                        </p>
+                    </div>
+                </div>
+                <div id="popular-row"
+                    style="display: flex; gap: 16px; overflow-x: auto; padding: 16px; scrollbar-width: none; -ms-overflow-style: none;">
+                    <!-- JS rendered popular products -->
+                </div>
+                <style>
+                    #popular-row::-webkit-scrollbar {
+                        display: none;
+                    }
+                </style>
+            </div>
+
+            <!-- Category Pills -->
+            <div style="display:flex; gap:8px; flex-wrap:wrap; margin-bottom:28px;" id="cat-pills"></div>
+            <!-- Products grid -->
+            <div id="products-grid" class="products-grid"></div>
+            <!-- Empty state -->
+            <div id="empty-state" style="display:none; text-align:center; padding:60px;">
+                <div style="font-size:64px; margin-bottom:16px;">🔍</div>
+                <h3 style="margin-bottom:8px;">No products found</h3>
+                <p class="text-muted" style="margin-bottom:20px;">Try a different keyword or category</p>
+                <button onclick="clearFilters()" class="btn btn-primary">Clear Filters</button>
+            </div>
+        </div>
+    </section>
+
+    <div class="toast-container" id="toast-container"></div>
+    <script src="js/cart.js"></script>
+    <script>
+        let ALL_PRODUCTS = [];
+
+        async function initProducts() {
+            try {
+                ALL_PRODUCTS = await KBApi.request('/api/products');
+                renderPopular();
+                renderAll(ALL_PRODUCTS);
+            } catch (err) {
+                showToast('Failed to load products', 'error');
+            }
+        }
+
+        function renderPopular() {
+            const container = document.getElementById('popular-row');
+            if (!container) return;
+            container.innerHTML = '';
+
+            // Get top 6 products by rating
+            const popular = [...ALL_PRODUCTS]
+                .sort((a, b) => b.rating - a.rating)
+                .slice(0, 6);
+
+            popular.forEach(p => {
+                const enc = encodeURIComponent(p.name);
+                container.insertAdjacentHTML('beforeend', `
+                    <div class="card product-card" style="min-width: 200px; max-width: 200px; flex: 0 0 auto;">
+                        <div class="product-img-container" style="height: 140px;" onclick="window.location.href='pages/product-details.html?name=${enc}'">
+                            <img src="${p.img}" alt="${p.name}" style="filter: ${p.filter || 'none'}; max-height: 80%;" />
+                        </div>
+                        <div class="product-card-body" style="padding: 12px;">
+                            <h4 style="font-size: 14px; margin-bottom: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; cursor:pointer;" onclick="window.location.href='pages/product-details.html?name=${enc}'">${p.name}</h4>
+                            <div style="display: flex; justify-content: space-between; align-items: center;">
+                                <div style="color: var(--primary); font-weight: 800; font-size: 16px;">₹${p.price}</div>
+                                <div style="font-size: 12px; font-weight: 700;">⭐ ${p.rating}</div>
+                            </div>
+                        </div>
+                    </div>
+                `);
+            });
+        }
+
+        const CATS = ['All', 'Vegetables', 'Fruits', 'Grains', 'Pulses', 'Dairy', 'Organic', 'Spices'];
+        const EMOJIS = { 'All': '🌾', 'Vegetables': '🍅', 'Fruits': '🍎', 'Grains': '🌾', 'Pulses': '🫘', 'Dairy': '🥛', 'Organic': '🌿', 'Spices': '🌶️' };
+
+        let pendingCart = {};
+
+        function buildPills() {
+            const container = document.getElementById('cat-pills');
+            CATS.forEach(cat => {
+                const active = cat === 'All' ? '' : '';
+                container.insertAdjacentHTML('beforeend', `
+      <button id="pill-${cat}" onclick="quickFilter('${cat === 'All' ? '' : cat}')"
+        class="badge" style="cursor:pointer;padding:8px 16px;font-size:13px;background:rgba(46,125,50,0.06);color:var(--text-muted);border:none;">
+        ${EMOJIS[cat]} ${cat}
+      </button>
+    `);
+            });
+            updateActivePill(document.getElementById('category-select').value || 'All');
+        }
+
+        function updateActivePill(activeCat) {
+            CATS.forEach(cat => {
+                const el = document.getElementById('pill-' + cat);
+                if (!el) return;
+                const isActive = (activeCat === 'All' && cat === 'All') || (cat === activeCat);
+                el.style.background = isActive ? 'rgba(46,125,50,0.12)' : 'rgba(46,125,50,0.06)';
+                el.style.color = isActive ? 'var(--primary)' : 'var(--text-muted)';
+                el.style.fontWeight = isActive ? '700' : '400';
+            });
+        }
+
+        function quickFilter(cat) {
+            document.getElementById('category-select').value = cat;
+            filterProducts();
+        }
+
+        function clearFilters() {
+            document.getElementById('search-input').value = '';
+            document.getElementById('category-select').value = '';
+            document.getElementById('sort-select').value = 'popular';
+            filterProducts();
+        }
+
+        function filterProducts() {
+            const q = (document.getElementById('search-input').value || '').toLowerCase().trim();
+            const cat = document.getElementById('category-select').value;
+            const sort = document.getElementById('sort-select').value;
+
+            let filtered = ALL_PRODUCTS.filter(p =>
+                (!q || p.name.toLowerCase().includes(q) || p.region.toLowerCase().includes(q) || p.farmer.toLowerCase().includes(q)) &&
+                (!cat || p.cat === cat)
+            );
+
+            if (sort === 'price-low') filtered.sort((a, b) => a.price - b.price);
+            if (sort === 'price-high') filtered.sort((a, b) => b.price - a.price);
+            if (sort === 'rating') filtered.sort((a, b) => b.rating - a.rating);
+
+            document.getElementById('result-count').textContent = filtered.length + ' product' + (filtered.length !== 1 ? 's' : '') + ' found';
+            updateActivePill(cat || 'All');
+            renderAll(filtered);
+        }
+
+        function renderAll(list) {
+            const grid = document.getElementById('products-grid');
+            const empty = document.getElementById('empty-state');
+            grid.innerHTML = '';
+            empty.style.display = list.length ? 'none' : 'block';
+
+            list.forEach(p => {
+                const enc = encodeURIComponent(p.name);
+                grid.insertAdjacentHTML('beforeend', `
+      <div class="card product-card">
+        <div class="product-img-container" onclick="window.location.href='pages/product-details.html?name=${enc}'">
+          <img src="${p.img}" alt="${p.name}" style="filter: ${p.filter || 'none'};" />
+        </div>
+        <div class="product-card-body">
+          <div class="product-card-farmer">
+            <div class="farmer-avatar-sm">${p.farmer[0]}</div>
+            <span style="font-size:12px;color:var(--text-muted);">${p.farmer} · ${p.region}</span>
+          </div>
+          <h3 onclick="window.location.href='pages/product-details.html?name=${enc}'" style="cursor:pointer;">${p.name}</h3>
+          <div class="product-card-meta">
+            <div class="product-price">₹${p.price}<span>/${p.unit}</span></div>
+            <div class="rating">⭐ <span>${p.rating} (${p.reviews})</span></div>
+          </div>
+          <button class="btn btn-primary w-full" id="btn-${enc}"
+            onclick="addToCartList(event,'${p.name}',${p.price},'${p.unit}','${p.farmer}','${p.img}')">
+            🛒 Add to Cart
+          </button>
+        </div>
+      </div>
+    `);
+            });
+        }
+
+        function addToCartList(e, name, price, unit, farmer, emoji) {
+            e.stopPropagation();
+            Cart.addItem(name, price, unit, farmer, emoji);
+            const btn = e.target.closest('button');
+            const orig = btn.innerHTML;
+            btn.innerHTML = '✅ Added!';
+            btn.disabled = true;
+            setTimeout(() => { btn.innerHTML = orig; btn.disabled = false; }, 1500);
+        }
+
+        /* ── Read URL params ─────────────────────────────────────── */
+        document.addEventListener('DOMContentLoaded', async function () {
+            buildPills();
+            const params = new URLSearchParams(location.search);
+            const q = params.get('q') || '';
+            const cat = params.get('cat') || '';
+            if (q) document.getElementById('search-input').value = q;
+            if (cat) document.getElementById('category-select').value = cat;
+
+            await initProducts();
+            if (q || cat) filterProducts(); // Re-filter if URL params present
+        });
+    </script>
+    <script src="js/app.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Buyer Dashboard — KisanBazaar</title>
+    <link rel="stylesheet" href="../css/style.css" />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;600;700;800&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet" />
+</head>
+
+<body>
+
+    <nav class="navbar">
+        <a href="../index.html" class="navbar-brand">🌿 KisanBazaar</a>
+        <ul class="navbar-nav">
+            <li><a href="../index.html">Home</a></li>
+            <li><a href="../products.html">Products</a></li>
+            <li><a href="buyer-dashboard.html" class="active">My Orders</a></li>
+        </ul>
+        <div class="navbar-actions" id="buyer-nav-actions">
+            <!-- Populated by JS -->
+        </div>
+    </nav>
+
+    <div class="dashboard">
+        <aside class="sidebar">
+            <div class="sidebar-user">
+                <div class="sidebar-avatar" id="sidebar-avatar">?</div>
+                <div class="sidebar-name" id="sidebar-name">Loading…</div>
+                <div class="sidebar-role" id="sidebar-role">🛒 Buyer</div>
+            </div>
+            <ul class="sidebar-nav">
+                <li><a href="#" class="active" onclick="showSection('orders'); return false;"><span class="icon">📊</span> My Orders</a></li>
+                <li><a href="../products.html"><span class="icon">🔍</span> Browse Products</a></li>
+                <li><a href="cart.html"><span class="icon">🛒</span> Cart <span class="cart-count badge badge-amber" style="margin-left:auto;font-size:11px;">0</span></a></li>
+                <li><a href="order-tracking.html"><span class="icon">📍</span> Track Order</a></li>
+                <li><a href="#" onclick="showSection('wishlist'); return false;"><span class="icon">❤️</span> Wishlist</a></li>
+                <li><a href="#" onclick="showSection('reviews'); return false;"><span class="icon">⭐</span> My Reviews</a></li>
+                <li><a href="#" onclick="showSection('payments'); return false;"><span class="icon">💳</span> Payments</a></li>
+                <li><a href="#" onclick="showSection('settings'); return false;"><span class="icon">⚙️</span> Settings</a></li>
+                <li><a href="#" onclick="KBSession.logout(); return false;"><span class="icon">🚪</span> Sign Out</a></li>
+            </ul>
+        </aside>
+
+        <main class="dashboard-main">
+
+            <!-- ── ORDERS ── -->
+            <div id="section-orders">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:24px;">
+                    <div>
+                        <h2 id="buyer-greeting" style="margin-bottom:4px;">My Orders 🛒</h2>
+                        <p class="text-muted">Track and manage your purchases</p>
+                    </div>
+                    <a href="../products.html" class="btn btn-primary">+ New Order</a>
+                </div>
+                <div class="stats-grid" style="grid-template-columns:repeat(auto-fill,minmax(160px,1fr));margin-bottom:24px;">
+                    <div class="stat-card">
+                        <div class="stat-icon">📦</div>
+                        <div class="stat-value" id="stat-total">0</div>
+                        <div class="stat-label">Total Orders</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">🚚</div>
+                        <div class="stat-value" id="stat-shipping">0</div>
+                        <div class="stat-label">In Delivery</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">✅</div>
+                        <div class="stat-value" id="stat-delivered">0</div>
+                        <div class="stat-label">Delivered</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">💚</div>
+                        <div class="stat-value" id="stat-spent">₹0</div>
+                        <div class="stat-label">Total Spent</div>
+                    </div>
+                </div>
+                <div style="display:flex; gap:10px; flex-wrap:wrap; margin-bottom:20px;">
+                    <button class="btn btn-primary btn-sm" id="ob-all" onclick="filterBuyerOrders('all')">All Orders</button>
+                    <button class="btn btn-outline btn-sm" id="ob-Confirmed" onclick="filterBuyerOrders('Confirmed')">⏳ Pending</button>
+                    <button class="btn btn-outline btn-sm" id="ob-shipping" onclick="filterBuyerOrders('shipping')">🚚 Shipping</button>
+                    <button class="btn btn-outline btn-sm" id="ob-delivered" onclick="filterBuyerOrders('delivered')">✅ Delivered</button>
+                </div>
+                <div id="buyer-orders-list"></div>
+            </div>
+
+            <!-- ── WISHLIST ── -->
+            <div id="section-wishlist" style="display:none;">
+                <h2 style="margin-bottom:24px;">My Wishlist ❤️</h2>
+                <div class="card" style="padding:40px; text-align:center; color:var(--text-muted);">
+                    <div style="font-size:48px;margin-bottom:16px;">❤️</div>
+                    <p>Your wishlist is empty. <a href="../products.html" style="color:var(--primary);">Browse products →</a></p>
+                </div>
+            </div>
+
+            <!-- ── REVIEWS ── -->
+            <div id="section-reviews" style="display:none;">
+                <h2 style="margin-bottom:24px;">My Reviews ⭐</h2>
+                <div id="reviews-list">
+                    <div class="card" style="padding:40px; text-align:center; color:var(--text-muted);">
+                        No reviews yet. Once you receive delivered orders, you can review them here.
+                    </div>
+                </div>
+                <div style="margin-top:24px;">
+                    <h3 style="margin-bottom:12px;">Write a Review</h3>
+                    <select class="form-control" id="review-order-select" style="max-width:300px;margin-bottom:12px;">
+                        <option value="">Select a delivered order…</option>
+                    </select>
+                    <div style="margin-bottom:12px;">
+                        <label style="font-size:14px;color:var(--text-muted);margin-bottom:6px;display:block;">Rating</label>
+                        <div style="font-size:28px;cursor:pointer;" id="star-rating">
+                            <span onclick="setRating(1)">⭐</span>
+                            <span onclick="setRating(2)">⭐</span>
+                            <span onclick="setRating(3)">⭐</span>
+                            <span onclick="setRating(4)">⭐</span>
+                            <span onclick="setRating(5)">⭐</span>
+                        </div>
+                    </div>
+                    <textarea class="form-control" id="review-text" style="max-width:500px;" rows="3"
+                        placeholder="Share your experience…"></textarea>
+                    <button class="btn btn-primary" style="margin-top:12px;"
+                        onclick="submitReview()">Submit Review</button>
+                </div>
+            </div>
+
+            <!-- ── PAYMENTS ── -->
+            <div id="section-payments" style="display:none;">
+                <h2 style="margin-bottom:24px;">Payment History 💳</h2>
+                <div class="table-container">
+                    <div class="table-header"><h3>Transactions</h3></div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Order ID</th>
+                                <th>Amount</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="payments-tbody"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- ── SETTINGS ── -->
+            <div id="section-settings" style="display:none;">
+                <h2 style="margin-bottom:24px;">Account Settings</h2>
+                <div class="card" style="padding:28px;max-width:600px;">
+                    <h3 style="margin-bottom:20px;">Profile Information</h3>
+                    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+                        <div class="form-group"><label class="form-label">Full Name</label><input type="text"
+                                class="form-control" id="settings-name" /></div>
+                        <div class="form-group"><label class="form-label">City</label><input type="text"
+                                class="form-control" id="settings-city" /></div>
+                    </div>
+                    <div class="form-group"><label class="form-label">Email</label><input type="email"
+                            class="form-control" id="settings-email" /></div>
+                    <div class="form-group"><label class="form-label">Mobile</label><input type="tel"
+                            class="form-control" id="settings-mobile" /></div>
+                    <button class="btn btn-primary" onclick="saveSettings()">Save Changes</button>
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+    <div class="toast-container" id="toast-container"></div>
+    <script src="../js/cart.js"></script>
+    <script src="../js/app.js"></script>
+    <script>
+        let BUYER_ORDERS = [];
+        let CURRENT_USER = null;
+        const statusMap = {
+            pending: { badge: 'badge-yellow', icon: '⏳' },
+            Confirmed: { badge: 'badge-green', icon: '✅' },
+            confirmed: { badge: 'badge-green', icon: '✅' },
+            shipping: { badge: 'badge-amber', icon: '🚚' },
+            delivered: { badge: 'badge-green', icon: '✅ Delivered' }
+        };
+
+        async function initDashboard() {
+            CURRENT_USER = KBSession.getUser();
+            if (!CURRENT_USER) {
+                window.location.href = 'login.html';
+                return;
+            }
+
+            // Profile
+            const initial = CURRENT_USER.name ? CURRENT_USER.name[0].toUpperCase() : 'B';
+            document.getElementById('sidebar-avatar').textContent = initial;
+            document.getElementById('sidebar-name').textContent = CURRENT_USER.name;
+            document.getElementById('sidebar-role').textContent = `🛒 Buyer · ${CURRENT_USER.city || ''}`;
+            document.getElementById('buyer-greeting').textContent = `Welcome, ${CURRENT_USER.name.split(' ')[0]}! 🛒`;
+
+            // Navbar
+            const navActions = document.getElementById('buyer-nav-actions');
+            if (navActions) {
+                navActions.innerHTML = `
+                    <a href="cart.html" class="btn btn-outline btn-sm">🛒 Cart <span class="cart-count" style="background:var(--accent);color:#fff;border-radius:100px;padding:2px 7px;font-size:11px;margin-left:3px;">0</span></a>
+                    <span style="font-size:14px;color:var(--text-muted);display:flex;align-items:center;gap:6px;">
+                        <span style="width:28px;height:28px;border-radius:50%;background:var(--accent);color:#fff;display:inline-flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;">${initial}</span>
+                        ${CURRENT_USER.name.split(' ')[0]}
+                    </span>
+                    <a href="#" class="btn btn-outline btn-sm" onclick="KBSession.logout();return false;">Sign Out</a>
+                `;
+            }
+
+            // Pre-fill settings
+            document.getElementById('settings-name').value = CURRENT_USER.name || '';
+            document.getElementById('settings-email').value = CURRENT_USER.email || '';
+            document.getElementById('settings-mobile').value = CURRENT_USER.mobile || '';
+            document.getElementById('settings-city').value = CURRENT_USER.city || '';
+
+            try {
+                BUYER_ORDERS = await KBApi.request(`/api/orders?userId=${CURRENT_USER.id}`);
+                filterBuyerOrders('all');
+                populateStats();
+                populatePayments();
+                populateReviewSelect();
+                syncCartCount();
+            } catch (err) {
+                console.error(err);
+                showToast('Failed to load orders: ' + err.message, 'error');
+            }
+        }
+
+        function populateStats() {
+            document.getElementById('stat-total').textContent = BUYER_ORDERS.length;
+            document.getElementById('stat-shipping').textContent = BUYER_ORDERS.filter(o => o.status === 'shipping').length;
+            document.getElementById('stat-delivered').textContent = BUYER_ORDERS.filter(o => o.status === 'delivered').length;
+            document.getElementById('stat-spent').textContent = '₹' + BUYER_ORDERS.reduce((s, o) => s + (o.total || 0), 0).toLocaleString('en-IN');
+        }
+
+        function populatePayments() {
+            const tbody = document.getElementById('payments-tbody');
+            tbody.innerHTML = '';
+            if (BUYER_ORDERS.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="4" style="text-align:center;padding:32px;color:var(--text-muted);">No transactions yet.</td></tr>';
+                return;
+            }
+            BUYER_ORDERS.forEach(o => {
+                tbody.insertAdjacentHTML('beforeend', `
+                    <tr>
+                        <td>${o.timestamp ? new Date(o.timestamp).toLocaleDateString('en-IN', { day: 'numeric', month: 'short' }) : '—'}</td>
+                        <td style="color:var(--primary);font-weight:700;">#${o.id.slice(-6).toUpperCase()}</td>
+                        <td style="font-weight:700;">₹${(o.total || 0).toLocaleString('en-IN')}</td>
+                        <td><span class="badge badge-green">Paid</span></td>
+                    </tr>
+                `);
+            });
+        }
+
+        function populateReviewSelect() {
+            const select = document.getElementById('review-order-select');
+            const delivered = BUYER_ORDERS.filter(o => o.status === 'delivered');
+            delivered.forEach(o => {
+                const itemsStr = (o.items || []).map(i => i.name).join(', ');
+                select.insertAdjacentHTML('beforeend', `<option value="${o.id}">${itemsStr} (#${o.id.slice(-6).toUpperCase()})</option>`);
+            });
+        }
+
+        let selectedRating = 5;
+        function setRating(r) { selectedRating = r; showToast('Rating: ' + '⭐'.repeat(r), ''); }
+
+        function submitReview() {
+            showToast('✅ Review submitted! Thank you.', 'success');
+        }
+
+        function renderBuyerOrders(list) {
+            const c = document.getElementById('buyer-orders-list');
+            if (!c) return;
+            c.innerHTML = '';
+            if (list.length === 0) {
+                c.innerHTML = '<div class="card" style="padding:40px; text-align:center; color:var(--text-muted);">No orders found. <a href="../products.html" style="color:var(--primary);">Start shopping →</a></div>';
+                return;
+            }
+            list.forEach(o => {
+                const s = statusMap[o.status] || statusMap.Confirmed;
+                const itemsStr = (o.items || []).map(i => `${i.name} (${i.qty} ${i.unit})`).join(', ');
+                c.insertAdjacentHTML('beforeend', `
+                    <div class="card" style="padding:20px;margin-bottom:16px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px;">
+                        <div style="flex:1;min-width:200px;">
+                            <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;flex-wrap:wrap;">
+                                <span style="font-weight:800;color:var(--primary);font-size:16px;">#${o.id.slice(-6).toUpperCase()}</span>
+                                <span class="badge ${s.badge}">${s.icon} ${o.status}</span>
+                            </div>
+                            <p style="font-size:14px;margin-bottom:4px;">${itemsStr}</p>
+                            <p class="text-muted" style="font-size:13px;">Placed on: ${o.timestamp ? new Date(o.timestamp).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' }) : '—'}</p>
+                        </div>
+                        <div style="text-align:right;">
+                            <div style="font-size:22px;font-weight:800;margin-bottom:12px;">₹${(o.total || 0).toLocaleString('en-IN')}</div>
+                            <div style="display:flex;gap:8px;">
+                                <a href="order-tracking.html?id=${o.id}" class="btn btn-outline btn-sm">📍 Track</a>
+                                ${o.status === 'delivered' ? `<button class="btn btn-primary btn-sm" onclick="writeReview('${o.id}')">⭐ Review</button>` : ''}
+                            </div>
+                        </div>
+                    </div>
+                `);
+            });
+        }
+
+        function filterBuyerOrders(status) {
+            ['all', 'Confirmed', 'shipping', 'delivered'].forEach(s => {
+                const el = document.getElementById('ob-' + s);
+                if (el) el.className = s === status ? 'btn btn-primary btn-sm' : 'btn btn-outline btn-sm';
+            });
+            const filtered = status === 'all' ? BUYER_ORDERS : BUYER_ORDERS.filter(o => o.status === status);
+            renderBuyerOrders(filtered);
+        }
+
+        function writeReview(orderId) {
+            showSection('reviews');
+            document.getElementById('review-order-select').value = orderId;
+        }
+
+        const SECTIONS = ['orders', 'wishlist', 'reviews', 'payments', 'settings'];
+        const sidebarMapBuyer = { orders: 0, wishlist: 4, reviews: 5, payments: 6, settings: 7 };
+
+        function showSection(name) {
+            SECTIONS.forEach(s => {
+                const el = document.getElementById('section-' + s);
+                if (el) el.style.display = s === name ? 'block' : 'none';
+            });
+            document.querySelectorAll('.sidebar-nav a').forEach(a => a.classList.remove('active'));
+            const idx = sidebarMapBuyer[name];
+            const links = document.querySelectorAll('.sidebar-nav a');
+            if (idx !== undefined && links[idx]) links[idx].classList.add('active');
+
+            if (name === 'payments') populatePayments();
+        }
+
+        async function saveSettings() {
+            const name  = document.getElementById('settings-name').value.trim();
+            const email = document.getElementById('settings-email').value.trim();
+            const mobile = document.getElementById('settings-mobile').value.trim();
+            const city  = document.getElementById('settings-city').value.trim();
+
+            if (!name) { showToast('⚠ Name cannot be empty', 'error'); return; }
+
+            // 1. Update localStorage session immediately so all pages reflect the change
+            const updated = { ...CURRENT_USER, name, email, mobile, city };
+            KBSession.setUser(updated);
+            CURRENT_USER = updated;
+
+            // 2. Refresh sidebar & navbar with new name
+            const initial = name[0].toUpperCase();
+            document.getElementById('sidebar-avatar').textContent = initial;
+            document.getElementById('sidebar-name').textContent = name;
+            document.getElementById('sidebar-role').textContent = `🛒 Buyer · ${city}`;
+            document.getElementById('buyer-greeting').textContent = `Welcome, ${name.split(' ')[0]}! 🛒`;
+            const navActions = document.getElementById('buyer-nav-actions');
+            if (navActions) {
+                navActions.innerHTML = `
+                    <a href="cart.html" class="btn btn-outline btn-sm">🛒 Cart <span class="cart-count" style="background:var(--accent);color:#fff;border-radius:100px;padding:2px 7px;font-size:11px;margin-left:3px;">0</span></a>
+                    <span style="font-size:14px;color:var(--text-muted);display:flex;align-items:center;gap:6px;">
+                        <span style="width:28px;height:28px;border-radius:50%;background:var(--accent);color:#fff;display:inline-flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;">${initial}</span>
+                        ${name.split(' ')[0]}
+                    </span>
+                    <a href="#" class="btn btn-outline btn-sm" onclick="KBSession.logout();return false;">Sign Out</a>
+                `;
+            }
+
+            // 3. Optionally persist to server (best-effort)
+            try {
+                await KBApi.request('/api/users/' + CURRENT_USER.id, 'PATCH', { name, email, mobile, city });
+            } catch(e) { /* server update is best-effort */ }
+
+            showToast('✅ Profile updated! Changes reflected everywhere.', 'success');
+        }
+
+        document.addEventListener('DOMContentLoaded', initDashboard);
+    </script>
+</body>
+
+</html>

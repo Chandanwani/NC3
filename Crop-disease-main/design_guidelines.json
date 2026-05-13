@@ -1,0 +1,100 @@
+{
+  "theme": "Light",
+  "archetype": "Organic & Earthy",
+  "colors": {
+    "background": "#F9F8F6",
+    "surface": "#FFFFFF",
+    "primary": "#2D6A4F",
+    "primary_hover": "#1B4332",
+    "secondary": "#E07A5F",
+    "secondary_hover": "#D35400",
+    "text_primary": "#1A1A1A",
+    "text_secondary": "#5C5C5C",
+    "border": "#E5E3DB",
+    "ai_bubble": "#FFFFFF",
+    "user_bubble": "#2D6A4F",
+    "user_bubble_text": "#FFFFFF",
+    "success": "#4CAF50",
+    "warning": "#FF9800",
+    "error": "#F44336",
+    "chip_bg": "#EDF2F0",
+    "chip_text": "#2D6A4F"
+  },
+  "typography": {
+    "heading_font": "Outfit",
+    "body_font": "Manrope",
+    "scales": {
+      "h1": "text-4xl tracking-tight font-semibold",
+      "h2": "text-2xl tracking-tight font-medium",
+      "h3": "text-xl font-medium",
+      "body": "text-base leading-relaxed",
+      "small": "text-sm text-secondary",
+      "chip": "text-sm font-medium"
+    }
+  },
+  "layout_and_spacing": {
+    "sidebar_width": "w-72",
+    "chat_container": "max-w-4xl mx-auto",
+    "padding": {
+      "page": "p-4 md:p-8",
+      "bubble": "px-5 py-3",
+      "input_area": "p-4 border-t border-border bg-surface"
+    },
+    "border_radius": {
+      "bubble_ai": "rounded-2xl rounded-tl-none",
+      "bubble_user": "rounded-2xl rounded-tr-none",
+      "container": "rounded-xl",
+      "button": "rounded-lg"
+    }
+  },
+  "components": {
+    "sidebar": "Fixed left sidebar on desktop, slide-over drawer on mobile. Contains recent chat sessions.",
+    "top_nav": "Contains Brand Logo/Name and an English/Hindi Language Toggle button (e.g., [EN | HI]).",
+    "chat_area": "Main scrollable area for chat bubbles. Background should be slightly off-white (#F9F8F6).",
+    "message_bubble_user": "Solid primary color (#2D6A4F) background with white text, aligned right.",
+    "message_bubble_ai": "White background with a subtle border (#E5E3DB) and soft shadow (shadow-sm), aligned left. Supports markdown rendering for disease name, precautions, and fertilizer effects.",
+    "quick_reply_chips": "Horizontal scrollable list of chips (e.g., 'Show Precautions', 'Effect on Soil') below AI responses.",
+    "input_area": "Fixed at the bottom. Contains a text input/textarea, an image upload button (icon: image or camera), and a send button (icon: send or arrow-right)."
+  },
+  "icons": {
+    "library": "lucide-react",
+    "suggestions": {
+      "logo": "Leaf",
+      "upload": "ImagePlus",
+      "send": "Send",
+      "language": "Languages",
+      "menu": "Menu",
+      "new_chat": "Plus",
+      "history": "MessageSquare",
+      "disease": "Bug",
+      "precaution": "ShieldCheck",
+      "fertilizer": "FlaskConical",
+      "soil": "Sprout"
+    }
+  },
+  "images": {
+    "demo_disease_leaf": {
+      "url": "https://images.unsplash.com/photo-1649088311431-9ffe92a4d4a4?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjAzMzV8MHwxfHNlYXJjaHw0fHxsZWFmJTIwYmxpZ2h0fGVufDB8fHx8MTc3NTk3MzI1MHww&ixlib=rb-4.1.0&q=85",
+      "description": "A green leaf with brown spots on it, used as a mock image upload for leaf blight disease detection."
+    }
+  },
+  "motion_and_interactions": {
+    "hover_states": "Buttons and chips should slightly lift (-translate-y-0.5) and darken/lighten on hover.",
+    "typing_indicator": "Use three animating dots for the AI processing state.",
+    "image_upload_preview": "Show a thumbnail of the uploaded image above the input field with a clear 'X' to remove it."
+  },
+  "accessibility_and_testing": {
+    "testing_attributes": "All interactive and key informational elements MUST include a data-testid attribute (e.g., data-testid='upload-image-button', data-testid='send-message-button', data-testid='language-toggle').",
+    "contrast": "Ensure text colors meet WCAG AA standards against their backgrounds."
+  },
+  "special_instructions_for_agent": [
+    "Build a single-page React app with a chat interface structure.",
+    "Ensure the language toggle actually updates the mock content (e.g., switches placeholder text and AI responses between English and Hindi).",
+    "When an image is uploaded and sent, simulate a delay (typing indicator) and then respond with a structured AI message containing: Disease Name, Precautions, and Fertilizer/Medicine effects.",
+    "Use the provided image URL to mock a user's uploaded image if they don't upload a real one.",
+    "Use standard Shadcn components (Button, Input, Textarea, ScrollArea, Tooltip, Sheet for mobile menu, etc.).",
+    "Implement 'Outfit' and 'Manrope' via Google Fonts in the HTML/CSS.",
+    "DO NOT use a fully transparent header; use solid surface or glassmorphism.",
+    "Include data-testid on every clickable element."
+  ]
+}

@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>My Cart — KisanBazaar</title>
+    <meta name="description" content="View and manage your KisanBazaar shopping cart." />
+    <link rel="stylesheet" href="../css/style.css" />
+</head>
+
+<body>
+
+    <nav class="navbar">
+        <a href="../index.html" class="navbar-brand">🌿 KisanBazaar</a>
+        <ul class="navbar-nav">
+            <li><a href="../index.html">Home</a></li>
+            <li><a href="../products.html">Products</a></li>
+        </ul>
+        <div class="navbar-actions">
+            <!-- Populated by app.js dynamically based on login state -->
+        </div>
+    </nav>
+
+    <section>
+        <div class="container">
+            <h2 style="margin-bottom:8px;">Shopping Cart 🛒</h2>
+            <p class="text-muted" style="margin-bottom:32px;"><span id="cart-count">0</span> items in your cart</p>
+
+            <div id="empty-msg" style="display:none; text-align:center; padding:60px 20px;">
+                <div style="font-size:72px; margin-bottom:20px;">🛒</div>
+                <h3 style="margin-bottom:12px;">Your cart is empty</h3>
+                <p class="text-muted" style="margin-bottom:24px;">Add some fresh produce and support Indian farmers!</p>
+                <a href="../products.html" class="btn btn-primary btn-lg">Browse Products →</a>
+            </div>
+
+            <div class="cart-layout" id="cart-layout">
+                <!-- Cart Items -->
+                <div class="table-container" style="border-radius:var(--radius-md);">
+                    <div id="cart-items"></div>
+                    <div style="padding:20px; border-top:1px solid var(--border); display:flex; justify-content:space-between;">
+                        <a href="../products.html" class="btn btn-outline">← Continue Shopping</a>
+                        <button class="btn btn-outline" style="color:var(--error); border-color:var(--error);"
+                            onclick="clearAll()">🗑 Clear Cart</button>
+                    </div>
+                </div>
+
+                <!-- Order Summary -->
+                <div>
+                    <div class="card" style="padding:24px; position:sticky; top:88px;">
+                        <h3 style="margin-bottom:20px;">Order Summary</h3>
+                        <div id="summary-lines" style="margin-bottom:16px;"></div>
+                        <div class="divider"></div>
+                        <div style="margin:16px 0;">
+                            <div style="display:flex; justify-content:space-between; margin-bottom:8px;">
+                                <span class="text-muted">Subtotal</span>
+                                <span id="subtotal" style="font-weight:700;">₹0</span>
+                            </div>
+                            <div style="display:flex; justify-content:space-between; margin-bottom:8px;">
+                                <span class="text-muted">Delivery</span>
+                                <span style="color:var(--success); font-weight:600;">FREE</span>
+                            </div>
+                            <div style="display:flex; justify-content:space-between; margin-bottom:8px;">
+                                <span class="text-muted">Platform fee</span>
+                                <span style="font-weight:600;">₹20</span>
+                            </div>
+                        </div>
+                        <div class="divider"></div>
+                        <div style="display:flex; justify-content:space-between; margin:16px 0; font-size:20px; font-weight:800;">
+                            <span>Total</span>
+                            <span id="total" style="color:var(--primary);">₹0</span>
+                        </div>
+                        <div style="background:rgba(46,125,50,0.06); border-radius:var(--radius-sm); padding:12px; margin-bottom:16px; font-size:13px; color:var(--text-muted);">
+                            🚚 Free delivery on all orders · 24–48 hr delivery
+                        </div>
+                        <!-- ✅ Login-aware Checkout button -->
+                        <button id="checkout-btn" onclick="proceedToCheckout()"
+                            class="btn btn-primary w-full btn-lg" style="justify-content:center; font-size:16px;">
+                            Proceed to Checkout →
+                        </button>
+                        <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-top:12px; text-align:center; font-size:12px; color:var(--text-muted);">
+                            <div>🔒 Secure Payment</div>
+                            <div>💳 UPI / Card / COD</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ── Login Required Overlay (shown only when not logged in) ── -->
+    <div id="login-prompt" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.55); z-index:9999; align-items:center; justify-content:center;">
+        <div style="background:#fff; border-radius:24px; padding:40px; max-width:400px; width:90%; text-align:center; box-shadow:0 20px 60px rgba(0,0,0,0.25);">
+            <div style="font-size:56px; margin-bottom:16px;">🔐</div>
+            <h3 style="margin-bottom:10px; font-size:22px;">Login to Place Your Order</h3>
+            <p style="color:var(--text-muted); margin-bottom:28px; font-size:15px; line-height:1.7;">
+                You're almost there! Sign in to complete your purchase.<br>
+                <strong style="color:var(--primary);">Your cart items are saved</strong> — they won't be lost.
+            </p>
+            <div style="display:flex; gap:12px; justify-content:center; flex-wrap:wrap;">
+                <a href="login.html" class="btn btn-primary btn-lg">🔐 Sign In</a>
+                <a href="buyer-register.html" class="btn btn-outline btn-lg">Register Free</a>
+            </div>
+            <button onclick="closeLoginPrompt()"
+                style="margin-top:20px; background:none; border:none; color:var(--text-muted); cursor:pointer; font-size:14px; display:block; width:100%;">
+                ✕ Continue browsing without signing in
+            </button>
+        </div>
+    </div>
+
+    <div class="toast-container" id="toast-container"></div>
+    <!-- IMPORTANT: app.js must load BEFORE inline script so KBSession is defined -->
+    <script src="../js/cart.js"></script>
+    <script src="../js/app.js"></script>
+    <script>
+        function render() {
+            const items = Cart.getAll();
+            const cartItems = document.getElementById('cart-items');
+            const summaryLines = document.getElementById('summary-lines');
+            document.getElementById('cart-layout').style.display = items.length ? 'grid' : 'none';
+            document.getElementById('empty-msg').style.display = items.length ? 'none' : 'block';
+            document.getElementById('cart-count').textContent = Cart.getCount();
+
+            cartItems.innerHTML = '';
+            summaryLines.innerHTML = '';
+            let sub = 0;
+
+            items.forEach(item => {
+                const lineTotal = item.price * item.qty;
+                sub += lineTotal;
+
+                cartItems.insertAdjacentHTML('beforeend', `
+                    <div class="cart-item" id="ci-${item.name.replace(/\s/g, '_')}">
+                        <div style="font-size:44px;">${item.emoji || '🛒'}</div>
+                        <div style="flex:1;">
+                            <h4 style="font-family:'DM Sans',sans-serif; margin-bottom:4px; cursor:pointer;"
+                                onclick="window.location.href='product-details.html?name=${encodeURIComponent(item.name)}'">
+                                ${item.name}
+                            </h4>
+                            <p class="text-muted" style="font-size:13px;">From: ${item.farmer || 'Farm Fresh'}</p>
+                            <p style="color:var(--primary); font-weight:700;">₹${item.price}/${item.unit || 'unit'}</p>
+                        </div>
+                        <div class="qty-control">
+                            <button class="qty-btn" onclick="changeQty('${item.name}', -1)">−</button>
+                            <span class="qty-num">${item.qty}</span>
+                            <button class="qty-btn" onclick="changeQty('${item.name}', 1)">+</button>
+                        </div>
+                        <div style="text-align:right; min-width:80px;">
+                            <p style="font-weight:800; font-size:18px;">₹${lineTotal}</p>
+                            <button onclick="removeItem('${item.name}')"
+                                style="background:none;border:none;color:var(--error);cursor:pointer;font-size:13px;margin-top:4px;">Remove</button>
+                        </div>
+                    </div>
+                `);
+
+                summaryLines.insertAdjacentHTML('beforeend', `
+                    <div style="display:flex;justify-content:space-between;margin-bottom:8px;font-size:14px;">
+                        <span class="text-muted">${item.name} × ${item.qty}</span>
+                        <span style="font-weight:600;">₹${lineTotal}</span>
+                    </div>
+                `);
+            });
+
+            document.getElementById('subtotal').textContent = '₹' + sub;
+            document.getElementById('total').textContent = '₹' + (sub + 20);
+        }
+
+        function changeQty(name, delta) { Cart.updateQty(name, delta); render(); }
+        function removeItem(name) { Cart.removeItem(name); render(); showToast('Item removed from cart'); }
+        function clearAll() { if (confirm('Clear all items from cart?')) { Cart.clear(); render(); } }
+        function closeLoginPrompt() { document.getElementById('login-prompt').style.display = 'none'; }
+
+        // ── KEY FIX: Check login before allowing checkout ──────────────
+        function proceedToCheckout() {
+            const user = KBSession.getUser();
+            if (!user) {
+                // Not logged in → show a friendly modal, DON'T redirect
+                document.getElementById('login-prompt').style.display = 'flex';
+            } else {
+                // Logged in → proceed normally
+                window.location.href = 'checkout.html';
+            }
+        }
+
+        render();
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,14 @@
+{
+    "version": 2,
+    "buildCommand": null,
+    "rewrites": [
+        {
+            "source": "/api/(.*)",
+            "destination": "/api/index.js"
+        },
+        {
+            "source": "/(.*)",
+            "destination": "/kisanbazaar/$1"
+        }
+    ]
+}

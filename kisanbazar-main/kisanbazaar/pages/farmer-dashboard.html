@@ -1,0 +1,1472 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Farmer Dashboard — KisanBazaar</title>
+    <link rel="stylesheet" href="../css/style.css" />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;600;700;800&family=Playfair+Display:wght@700;900&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+    <style>
+        /* ═══════════════════════════════════════════════════
+           CROPDOC AI — Scoped Styles (prefix: .cd-)
+        ═══════════════════════════════════════════════════ */
+        #section-cropdoc {
+            display: none;
+            height: calc(100vh - 68px);
+            overflow: hidden;
+        }
+
+        .cd-wrapper {
+            display: flex;
+            height: 100%;
+            background: #F9F8F6;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 32px rgba(0,0,0,0.08);
+        }
+
+        /* ── Left sidebar ── */
+        .cd-sidebar {
+            width: 260px;
+            min-width: 200px;
+            background: #fff;
+            border-right: 1px solid #e8e8e8;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .cd-sidebar-header {
+            padding: 16px 14px 10px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .cd-sidebar-header h3 {
+            font-size: 15px;
+            font-weight: 700;
+            color: #2D6A4F;
+            font-family: 'Outfit', sans-serif;
+            margin: 0 0 10px 0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .cd-new-chat-btn {
+            width: 100%;
+            background: #2D6A4F;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            padding: 9px 14px;
+            font-size: 13px;
+            font-weight: 600;
+            font-family: 'DM Sans', sans-serif;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.1s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            justify-content: center;
+        }
+        .cd-new-chat-btn:hover { background: #1B4332; transform: translateY(-1px); }
+
+        .cd-sidebar-tools {
+            display: flex;
+            gap: 6px;
+            padding: 10px 12px 0;
+        }
+
+        .cd-tool-btn {
+            flex: 1;
+            background: #f4f9f6;
+            color: #2D6A4F;
+            border: 1px solid #c8e6c3;
+            border-radius: 7px;
+            padding: 7px 4px;
+            font-size: 11px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: center;
+            font-family: 'DM Sans', sans-serif;
+        }
+        .cd-tool-btn:hover, .cd-tool-btn.active {
+            background: #2D6A4F; color: #fff; border-color: #2D6A4F;
+        }
+
+        .cd-sessions { flex: 1; overflow-y: auto; padding: 8px; }
+        .cd-sessions-label {
+            font-size: 10px; font-weight: 700; text-transform: uppercase;
+            letter-spacing: 0.08em; color: #bbb; padding: 8px 8px 4px;
+        }
+
+        .cd-session-item {
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 9px 10px; border-radius: 8px; cursor: pointer;
+            transition: background 0.15s; gap: 6px;
+        }
+        .cd-session-item:hover { background: #f4f9f6; }
+        .cd-session-item.active { background: #e8f5e9; }
+
+        .cd-session-title {
+            font-size: 13px; font-weight: 500; color: #333;
+            white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+            flex: 1; font-family: 'DM Sans', sans-serif;
+        }
+
+        .cd-session-del {
+            background: none; border: none; color: #ccc; cursor: pointer;
+            font-size: 14px; padding: 2px 4px; border-radius: 4px;
+            transition: color 0.15s; flex-shrink: 0;
+        }
+        .cd-session-del:hover { color: #e53e3e; }
+
+        /* ── Main chat ── */
+        .cd-main {
+            flex: 1; display: flex; flex-direction: column;
+            overflow: hidden; min-width: 0;
+        }
+
+        .cd-topbar {
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 11px 18px; background: rgba(255,255,255,0.94);
+            backdrop-filter: blur(12px); border-bottom: 1px solid #f0f0f0; gap: 10px;
+        }
+
+        .cd-title-group { display: flex; align-items: center; gap: 10px; }
+
+        .cd-logo-icon {
+            width: 32px; height: 32px; border-radius: 9px; background: #2D6A4F;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 17px; flex-shrink: 0;
+        }
+
+        .cd-app-name {
+            font-family: 'Outfit', sans-serif; font-size: 16px;
+            font-weight: 700; color: #2D6A4F;
+        }
+
+        .cd-badge {
+            background: #e8f5e9; color: #2D6A4F; border-radius: 100px;
+            font-size: 10px; font-weight: 700; padding: 2px 8px;
+            font-family: 'DM Sans', sans-serif;
+        }
+
+        .cd-offline-badge {
+            background: #fff8e1; color: #f59e0b; border-radius: 100px;
+            font-size: 10px; font-weight: 700; padding: 2px 8px;
+            font-family: 'DM Sans', sans-serif; border: 1px solid #fde68a;
+        }
+
+        .cd-lang-btn {
+            background: #f4f9f6; color: #2D6A4F; border: 1px solid #c8e6c3;
+            border-radius: 7px; padding: 6px 12px; font-size: 12px; font-weight: 700;
+            cursor: pointer; transition: all 0.2s; font-family: 'DM Sans', sans-serif;
+        }
+        .cd-lang-btn:hover { background: #2D6A4F; color: #fff; border-color: #2D6A4F; }
+
+        /* ── Welcome ── */
+        .cd-welcome {
+            flex: 1; display: flex; flex-direction: column; align-items: center;
+            justify-content: center; padding: 28px 20px; gap: 18px;
+            text-align: center; overflow-y: auto;
+        }
+
+        .cd-welcome-icon {
+            width: 68px; height: 68px; border-radius: 18px;
+            background: linear-gradient(135deg, #2D6A4F, #52B788);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 34px; box-shadow: 0 8px 28px rgba(45,106,79,0.3);
+        }
+
+        .cd-welcome h2 {
+            font-family: 'Outfit', sans-serif; font-size: 21px;
+            font-weight: 700; color: #1B4332; margin: 0;
+        }
+
+        .cd-welcome p {
+            font-size: 14px; color: #666; max-width: 420px;
+            line-height: 1.6; margin: 0; font-family: 'DM Sans', sans-serif;
+        }
+
+        .cd-offline-notice {
+            background: #fff8e1; border: 1px solid #fde68a; border-radius: 10px;
+            padding: 12px 16px; max-width: 420px; text-align: left;
+            font-size: 13px; color: #92400e; font-family: 'DM Sans', sans-serif;
+        }
+        .cd-offline-notice strong { display: block; margin-bottom: 4px; font-weight: 700; }
+
+        .cd-chips {
+            display: flex; flex-wrap: wrap; gap: 8px;
+            justify-content: center; max-width: 480px;
+        }
+
+        .cd-chip {
+            background: #fff; border: 1.5px solid #c8e6c3; color: #2D6A4F;
+            border-radius: 100px; padding: 7px 14px; font-size: 13px;
+            font-weight: 500; cursor: pointer; transition: all 0.2s;
+            font-family: 'DM Sans', sans-serif;
+        }
+        .cd-chip:hover {
+            background: #2D6A4F; color: #fff; border-color: #2D6A4F;
+            transform: translateY(-2px); box-shadow: 0 4px 12px rgba(45,106,79,0.2);
+        }
+
+        /* ── Messages ── */
+        .cd-messages {
+            flex: 1; overflow-y: auto; padding: 18px;
+            display: flex; flex-direction: column; gap: 14px;
+        }
+
+        .cd-msg { display: flex; gap: 10px; animation: cd-msg-in 0.3s ease; }
+        @keyframes cd-msg-in {
+            from { opacity: 0; transform: translateY(8px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        .cd-msg.user { flex-direction: row-reverse; }
+
+        .cd-avatar {
+            width: 30px; height: 30px; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 13px; flex-shrink: 0; font-weight: 700;
+        }
+        .cd-msg.user .cd-avatar { background: #2D6A4F; color: #fff; font-family: 'Outfit', sans-serif; }
+        .cd-msg.ai .cd-avatar   { background: linear-gradient(135deg, #2D6A4F, #52B788); color: #fff; }
+
+        .cd-bubble {
+            max-width: 74%; padding: 11px 15px; border-radius: 16px;
+            font-size: 14px; line-height: 1.65; font-family: 'DM Sans', sans-serif;
+        }
+        .cd-msg.user .cd-bubble {
+            background: #2D6A4F; color: #fff; border-bottom-right-radius: 4px;
+        }
+        .cd-msg.ai .cd-bubble {
+            background: #fff; color: #333; border-bottom-left-radius: 4px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+        }
+        .cd-bubble img { max-width: 180px; border-radius: 8px; margin-top: 8px; display: block; }
+        .cd-bubble strong { font-weight: 700; color: #1B4332; }
+        .cd-bubble h2 { font-size: 15px; font-weight: 700; color: #2D6A4F; margin: 10px 0 4px; }
+        .cd-bubble h3 { font-size: 14px; font-weight: 600; color: #2D6A4F; margin: 8px 0 4px; }
+        .cd-bubble ul { padding-left: 18px; margin: 6px 0; }
+        .cd-bubble li { margin-bottom: 3px; }
+        .cd-bubble a { color: #2D6A4F; text-decoration: underline; }
+        .cd-bubble code { background: #f0f7f4; padding: 1px 5px; border-radius: 4px; font-size: 12px; }
+        .cd-bubble hr { border: 0; border-top: 1px solid #e8f5e9; margin: 10px 0; }
+
+        .cd-typing { display: flex; gap: 4px; align-items: center; padding: 4px 0; }
+        .cd-typing span { width: 7px; height: 7px; border-radius: 50%; background: #52B788; animation: cd-bounce 1.2s infinite; }
+        .cd-typing span:nth-child(2) { animation-delay: 0.2s; }
+        .cd-typing span:nth-child(3) { animation-delay: 0.4s; }
+        @keyframes cd-bounce { 0%,60%,100%{transform:translateY(0);opacity:0.6} 30%{transform:translateY(-6px);opacity:1} }
+
+        /* ── Input ── */
+        .cd-input-area { padding: 12px 18px; background: #fff; border-top: 1px solid #f0f0f0; }
+
+        .cd-image-preview-wrap { display: none; margin-bottom: 10px; position: relative; }
+        .cd-image-preview-wrap.show { display: inline-block; }
+        .cd-image-preview { max-height: 75px; border-radius: 8px; border: 2px solid #c8e6c3; }
+        .cd-img-remove {
+            position: absolute; top: -6px; right: -6px; width: 20px; height: 20px;
+            background: #e53e3e; color: #fff; border: none; border-radius: 50%;
+            font-size: 11px; cursor: pointer; display: flex;
+            align-items: center; justify-content: center;
+        }
+
+        .cd-input-row { display: flex; gap: 8px; align-items: flex-end; }
+
+        .cd-textarea {
+            flex: 1; border: 1.5px solid #e0e0e0; border-radius: 12px;
+            padding: 10px 13px; font-size: 14px; font-family: 'DM Sans', sans-serif;
+            resize: none; outline: none; max-height: 120px; min-height: 42px;
+            line-height: 1.5; transition: border-color 0.2s; background: #fafafa;
+        }
+        .cd-textarea:focus { border-color: #2D6A4F; background: #fff; }
+        .cd-textarea::placeholder { color: #bbb; }
+
+        .cd-upload-btn, .cd-send-btn {
+            width: 42px; height: 42px; border-radius: 12px; border: none;
+            display: flex; align-items: center; justify-content: center;
+            cursor: pointer; flex-shrink: 0; font-size: 17px; transition: all 0.2s;
+        }
+        .cd-upload-btn { background: #f4f9f6; color: #2D6A4F; border: 1.5px solid #c8e6c3; }
+        .cd-upload-btn:hover { background: #e8f5e9; transform: scale(1.05); }
+        .cd-send-btn { background: #2D6A4F; color: #fff; }
+        .cd-send-btn:hover { background: #1B4332; transform: scale(1.05); }
+        .cd-send-btn:disabled { background: #c8e6c3; cursor: not-allowed; transform: none; }
+
+        .cd-hint { font-size: 11px; color: #ccc; text-align: center; margin-top: 5px; font-family: 'DM Sans', sans-serif; }
+
+        /* ── Panels ── */
+        .cd-panel { height: 100%; display: flex; flex-direction: column; overflow: hidden; }
+
+        .cd-panel-header {
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 14px 18px; border-bottom: 1px solid #f0f0f0; background: #fff;
+        }
+        .cd-panel-header h3 {
+            font-size: 15px; font-weight: 700; color: #1B4332;
+            font-family: 'Outfit', sans-serif; margin: 0;
+            display: flex; align-items: center; gap: 8px;
+        }
+        .cd-close-panel {
+            background: none; border: none; font-size: 17px; cursor: pointer;
+            color: #999; padding: 2px 6px; border-radius: 6px; transition: color 0.15s, background 0.15s;
+        }
+        .cd-close-panel:hover { color: #e53e3e; background: #fff5f5; }
+
+        /* Disease library */
+        .cd-search-bar { padding: 10px 14px; border-bottom: 1px solid #f0f0f0; background: #fff; }
+        .cd-search-input {
+            width: 100%; border: 1.5px solid #e0e0e0; border-radius: 8px;
+            padding: 8px 12px; font-size: 13px; font-family: 'DM Sans', sans-serif;
+            outline: none; transition: border-color 0.2s; box-sizing: border-box;
+        }
+        .cd-search-input:focus { border-color: #2D6A4F; }
+
+        .cd-disease-list {
+            flex: 1; overflow-y: auto; padding: 10px;
+            display: flex; flex-direction: column; gap: 8px;
+        }
+
+        .cd-disease-card {
+            background: #fff; border: 1px solid #e8f5e9; border-radius: 10px;
+            padding: 13px 14px; cursor: pointer; transition: all 0.2s;
+        }
+        .cd-disease-card:hover {
+            border-color: #2D6A4F;
+            box-shadow: 0 4px 16px rgba(45,106,79,0.12);
+            transform: translateY(-1px);
+        }
+        .cd-disease-name { font-size: 13px; font-weight: 700; color: #1B4332; margin-bottom: 4px; font-family: 'Outfit', sans-serif; }
+        .cd-disease-crops {
+            font-size: 11px; color: #52B788; font-weight: 600; background: #e8f5e9;
+            border-radius: 100px; padding: 2px 8px; display: inline-block;
+            margin-bottom: 5px; font-family: 'DM Sans', sans-serif;
+        }
+        .cd-disease-symptoms {
+            font-size: 12px; color: #666; line-height: 1.5; font-family: 'DM Sans', sans-serif;
+            display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+        }
+        .cd-ask-btn {
+            margin-top: 8px; background: #e8f5e9; color: #2D6A4F; border: none;
+            border-radius: 6px; padding: 5px 10px; font-size: 11px; font-weight: 600;
+            cursor: pointer; transition: all 0.15s; font-family: 'DM Sans', sans-serif;
+        }
+        .cd-ask-btn:hover { background: #2D6A4F; color: #fff; }
+
+        /* Weather */
+        .cd-weather-form { padding: 14px; border-bottom: 1px solid #f0f0f0; display: flex; gap: 8px; }
+        .cd-city-input {
+            flex: 1; border: 1.5px solid #e0e0e0; border-radius: 8px; padding: 9px 12px;
+            font-size: 13px; font-family: 'DM Sans', sans-serif; outline: none; transition: border-color 0.2s;
+        }
+        .cd-city-input:focus { border-color: #2D6A4F; }
+        .cd-weather-btn {
+            background: #2D6A4F; color: #fff; border: none; border-radius: 8px;
+            padding: 9px 14px; font-size: 13px; font-weight: 600; cursor: pointer;
+            transition: background 0.2s; font-family: 'DM Sans', sans-serif;
+        }
+        .cd-weather-btn:hover { background: #1B4332; }
+
+        .cd-weather-result { flex: 1; overflow-y: auto; padding: 14px; }
+
+        .cd-weather-card {
+            background: linear-gradient(135deg, #1B4332, #2D6A4F);
+            border-radius: 12px; color: #fff; padding: 18px; margin-bottom: 14px;
+        }
+        .cd-weather-city { font-size: 17px; font-weight: 700; font-family: 'Outfit', sans-serif; margin-bottom: 12px; }
+        .cd-weather-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .cd-weather-stat { font-size: 12px; opacity: 0.9; font-family: 'DM Sans', sans-serif; }
+        .cd-weather-stat strong { display: block; font-size: 19px; font-weight: 700; font-family: 'Outfit', sans-serif; }
+
+        .cd-alerts-title { font-size: 13px; font-weight: 700; color: #e53e3e; margin-bottom: 10px; font-family: 'DM Sans', sans-serif; }
+
+        .cd-alert-card {
+            border-radius: 10px; padding: 11px 13px; margin-bottom: 10px;
+            cursor: pointer; transition: all 0.2s;
+        }
+        .cd-alert-card.HIGH { background: #fff5f5; border: 1.5px solid #fc8181; }
+        .cd-alert-card.MEDIUM { background: #fffbeb; border: 1.5px solid #f6ad55; }
+        .cd-alert-card:hover { transform: translateY(-2px); box-shadow: 0 4px 14px rgba(0,0,0,0.1); }
+        .cd-alert-disease { font-size: 13px; font-weight: 700; color: #333; margin-bottom: 4px; font-family: 'Outfit', sans-serif; }
+        .cd-alert-crops { font-size: 11px; color: #666; margin-bottom: 5px; font-family: 'DM Sans', sans-serif; }
+        .cd-alert-badge { display: inline-block; font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 100px; font-family: 'DM Sans', sans-serif; }
+        .cd-alert-badge.HIGH { background: #fed7d7; color: #c53030; }
+        .cd-alert-badge.MEDIUM { background: #fef3c7; color: #b45309; }
+
+        .cd-no-alerts { text-align: center; color: #52B788; font-size: 14px; padding: 20px; font-family: 'DM Sans', sans-serif; }
+
+        /* ── CropDoc AI promo on dashboard ── */
+        .cd-dash-promo {
+            margin-top: 28px; padding: 22px;
+            background: linear-gradient(135deg,#1B4332,#2D6A4F);
+            color:#fff; border-radius: 16px; cursor: pointer;
+            display: flex; align-items: center; gap: 16px;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .cd-dash-promo:hover { transform: translateY(-2px); box-shadow: 0 8px 32px rgba(27,67,50,0.3); }
+
+        /* Scrollbars */
+        .cd-messages::-webkit-scrollbar,
+        .cd-sessions::-webkit-scrollbar,
+        .cd-disease-list::-webkit-scrollbar,
+        .cd-weather-result::-webkit-scrollbar { width: 4px; }
+        .cd-messages::-webkit-scrollbar-thumb,
+        .cd-sessions::-webkit-scrollbar-thumb,
+        .cd-disease-list::-webkit-scrollbar-thumb,
+        .cd-weather-result::-webkit-scrollbar-thumb { background: #c8e6c3; border-radius: 4px; }
+
+        /* ── Quick action chips below AI responses ── */
+        .cd-quick-chips {
+            display: flex; flex-wrap: wrap; gap: 6px;
+            padding: 2px 0;
+        }
+        .cd-quick-chip {
+            background: #fff; border: 1.5px solid #d0e8d0;
+            color: #2D6A4F; border-radius: 100px;
+            padding: 5px 12px; font-size: 12px; font-weight: 500;
+            cursor: pointer; font-family: 'DM Sans', sans-serif;
+            transition: all 0.2s; white-space: nowrap;
+        }
+        .cd-quick-chip:hover {
+            background: #2D6A4F; color: #fff; border-color: #2D6A4F;
+            transform: translateY(-1px);
+        }
+
+        @media (max-width: 680px) {
+            .cd-sidebar { display: none; }
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav class="navbar">
+        <a href="../index.html" class="navbar-brand">🌿 KisanBazaar</a>
+        <ul class="navbar-nav">
+            <li><a href="farmer-dashboard.html" class="active">Dashboard</a></li>
+            <li><a href="add-product.html">Add Product</a></li>
+            <li><a href="../products.html">Browse</a></li>
+            <li><a href="#" onclick="showSection('cropdoc'); return false;" style="color:#2D6A4F;font-weight:700;">🌿 CropDoc AI</a></li>
+        </ul>
+        <div class="navbar-actions" id="farmer-nav-actions">
+            <!-- Populated by JS -->
+        </div>
+    </nav>
+
+    <div class="dashboard">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-user">
+                <div class="sidebar-avatar" id="sidebar-avatar">?</div>
+                <div class="sidebar-name" id="sidebar-name">Loading…</div>
+                <div class="sidebar-role" id="sidebar-role">🌾 Farmer</div>
+                <div style="margin-top:8px;"><span class="badge badge-green">✅ Verified Farmer</span></div>
+            </div>
+            <ul class="sidebar-nav">
+                <li><a href="#" class="active" onclick="showSection('dashboard'); return false;"><span class="icon">📊</span> Dashboard</a></li>
+                <li><a href="add-product.html"><span class="icon">➕</span> Add Product</a></li>
+                <li><a href="#" onclick="showSection('my-products'); return false;"><span class="icon">📦</span> My Products</a></li>
+                <li><a href="#" onclick="showSection('orders'); return false;"><span class="icon">🛒</span> Orders <span class="badge badge-amber orders-count" style="margin-left:auto;"></span></a></li>
+                <li><a href="#" onclick="showSection('earnings'); return false;"><span class="icon">💰</span> Earnings</a></li>
+                <li><a href="#" onclick="showSection('reviews'); return false;"><span class="icon">⭐</span> Reviews</a></li>
+                <li><a href="#" onclick="showSection('cropdoc'); return false;"><span class="icon">🌿</span> CropDoc AI <span class="badge badge-green" style="margin-left:auto;font-size:9px;">NEW</span></a></li>
+                <li><a href="#" onclick="showSection('settings'); return false;"><span class="icon">⚙️</span> Settings</a></li>
+                <li><a href="#" onclick="KBSession.logout(); return false;"><span class="icon">🚪</span> Sign Out</a></li>
+            </ul>
+        </aside>
+
+        <!-- Main -->
+        <main class="dashboard-main">
+
+            <!-- ── DASHBOARD OVERVIEW ── -->
+            <div id="section-dashboard">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:28px;">
+                    <div>
+                        <h2 id="dash-greeting" style="margin-bottom:4px;">Good Morning! 🌅</h2>
+                        <p class="text-muted">Here's your farm performance overview</p>
+                    </div>
+                    <a href="add-product.html" class="btn btn-primary">+ Add Product</a>
+                </div>
+                <div class="stats-grid">
+                    <div class="stat-card" onclick="showSection('earnings')" style="cursor:pointer;">
+                        <div class="stat-icon">💰</div>
+                        <div class="stat-value" id="stat-earnings">₹0</div>
+                        <div class="stat-label">Total Earnings</div>
+                        <div class="stat-delta up" id="stat-earnings-delta"></div>
+                    </div>
+                    <div class="stat-card" onclick="showSection('orders')" style="cursor:pointer;">
+                        <div class="stat-icon">🛒</div>
+                        <div class="stat-value" id="stat-orders">0</div>
+                        <div class="stat-label">Orders Received</div>
+                    </div>
+                    <div class="stat-card" onclick="showSection('my-products')" style="cursor:pointer;">
+                        <div class="stat-icon">📦</div>
+                        <div class="stat-value" id="stat-products">0</div>
+                        <div class="stat-label">Active Products</div>
+                    </div>
+                    <div class="stat-card" onclick="showSection('reviews')" style="cursor:pointer;">
+                        <div class="stat-icon">⭐</div>
+                        <div class="stat-value">4.8</div>
+                        <div class="stat-label">Avg. Rating</div>
+                    </div>
+                </div>
+
+                <div class="table-container" style="margin-top:28px;">
+                    <div class="table-header">
+                        <h3>Recent Orders</h3>
+                        <button class="btn btn-outline btn-sm" onclick="showSection('orders')">View All →</button>
+                    </div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Order ID</th><th>Product</th><th>Buyer</th>
+                                <th>Amount</th><th>Status</th><th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="dash-orders-preview"></tbody>
+                    </table>
+                </div>
+
+                <!-- CropDoc AI promo card -->
+                <div class="cd-dash-promo" onclick="showSection('cropdoc')">
+                    <div style="width:50px;height:50px;background:rgba(255,255,255,0.15);border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:26px;flex-shrink:0;">🌿</div>
+                    <div>
+                        <div style="font-family:'Outfit',sans-serif;font-size:16px;font-weight:700;margin-bottom:4px;">CropDoc AI — Crop Disease Detection</div>
+                        <div style="font-size:13px;opacity:0.85;font-family:'DM Sans',sans-serif;">Describe crop symptoms or upload a photo · Get instant diagnosis, treatments & prevention tips · Works in English &amp; Hindi</div>
+                    </div>
+                    <div style="font-size:22px;margin-left:auto;flex-shrink:0;opacity:0.6;">→</div>
+                </div>
+            </div>
+
+            <!-- ── ORDERS ── -->
+            <div id="section-orders" style="display:none;">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:24px;">
+                    <h2>All Orders</h2>
+                    <div style="display:flex; gap:8px;">
+                        <button onclick="filterOrders('all')" class="btn btn-primary btn-sm">All</button>
+                        <button onclick="filterOrders('Confirmed')" class="btn btn-outline btn-sm">✅ Confirmed</button>
+                        <button onclick="filterOrders('confirmed')" class="btn btn-outline btn-sm">✅ Processing</button>
+                        <button onclick="filterOrders('delivered')" class="btn btn-outline btn-sm">📦 Delivered</button>
+                    </div>
+                </div>
+                <div class="table-container">
+                    <table>
+                        <thead><tr><th>Order ID</th><th>Product</th><th>Buyer</th><th>Qty</th><th>Amount</th><th>Date</th><th>Status</th><th>Action</th></tr></thead>
+                        <tbody id="orders-tbody"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- ── MY PRODUCTS ── -->
+            <div id="section-my-products" style="display:none;">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:24px;">
+                    <h2>My Products</h2>
+                    <a href="add-product.html" class="btn btn-primary">+ Add New</a>
+                </div>
+                <div class="products-grid" id="my-products-grid"></div>
+            </div>
+
+            <!-- ── EARNINGS ── -->
+            <div id="section-earnings" style="display:none;">
+                <h2 style="margin-bottom:24px;">Earnings &amp; Payouts</h2>
+                <div class="stats-grid" style="margin-bottom:28px;">
+                    <div class="stat-card"><div class="stat-icon">💰</div><div class="stat-value" id="earn-total">₹0</div><div class="stat-label">Total Earned</div></div>
+                    <div class="stat-card"><div class="stat-icon">📦</div><div class="stat-value" id="earn-orders">0</div><div class="stat-label">Total Orders</div></div>
+                    <div class="stat-card"><div class="stat-icon">✅</div><div class="stat-value" id="earn-delivered">0</div><div class="stat-label">Delivered</div></div>
+                </div>
+                <div class="table-container">
+                    <div class="table-header"><h3>Transaction History</h3></div>
+                    <table>
+                        <thead><tr><th>Date</th><th>Order ID</th><th>Product</th><th>Amount</th><th>Status</th></tr></thead>
+                        <tbody id="earnings-tbody"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- ── REVIEWS ── -->
+            <div id="section-reviews" style="display:none;">
+                <h2 style="margin-bottom:24px;">Customer Reviews</h2>
+                <div class="card" style="padding:24px;text-align:center;max-width:220px;margin-bottom:24px;">
+                    <div style="font-size:48px;font-weight:900;color:var(--primary);">4.8</div>
+                    <div style="color:#f59e0b;font-size:20px;margin-bottom:6px;">⭐⭐⭐⭐⭐</div>
+                    <p class="text-muted">Based on customer reviews</p>
+                </div>
+                <div id="reviews-list">
+                    <div class="card" style="padding:20px;color:var(--text-muted);text-align:center;">No reviews yet. More reviews appear as orders are delivered.</div>
+                </div>
+            </div>
+
+            <!-- ── CROPDOC AI ── -->
+            <div id="section-cropdoc">
+                <div class="cd-wrapper">
+
+                    <!-- Left sidebar -->
+                    <div class="cd-sidebar">
+                        <div class="cd-sidebar-header">
+                            <h3>🌿 CropDoc AI</h3>
+                            <button class="cd-new-chat-btn" onclick="cdNewChat()">✦ New Chat</button>
+                        </div>
+                        <div class="cd-sidebar-tools">
+                            <button class="cd-tool-btn" id="cd-tool-weather" onclick="cdShowPanel('weather')">🌤 Weather</button>
+                        </div>
+                        <div class="cd-sessions">
+                            <div class="cd-sessions-label">Chat History</div>
+                            <div id="cd-sessions-list"></div>
+                        </div>
+                    </div>
+
+                    <!-- Main area -->
+                    <div class="cd-main">
+                        <!-- Topbar -->
+                        <div class="cd-topbar">
+                            <div class="cd-title-group">
+                                <div class="cd-logo-icon">🌿</div>
+                                <div class="cd-app-name">CropDoc AI</div>
+                                <span class="cd-offline-badge" id="cd-mode-badge">⏳ Checking…</span>
+                                <span class="cd-badge">Farmer Only</span>
+                            </div>
+                            <div style="display:flex;gap:8px;align-items:center;">
+                                <button class="cd-lang-btn" onclick="cdExportChat()" style="font-size:12px;">↗ Export Chat</button>
+                                <button class="cd-lang-btn" onclick="cdToggleLang()" id="cd-lang-btn">अ हिंदी</button>
+                            </div>
+                        </div>
+
+                        <!-- Chat / Welcome -->
+                        <div id="cd-chat-area" style="flex:1;overflow:hidden;display:flex;flex-direction:column;">
+                            <div class="cd-welcome" id="cd-welcome">
+                                <div class="cd-welcome-icon">🌾</div>
+                                <h2 id="cd-welcome-title">Welcome to CropDoc AI</h2>
+                                <p id="cd-welcome-sub">Describe your crop symptoms or upload a photo for instant AI diagnosis. Powered by Google Gemini Vision — recognizes diseases from real crop photos!</p>
+                                <div class="cd-offline-notice" id="cd-mode-notice">
+                                    <strong id="cd-mode-title">⏳ Checking AI connection…</strong>
+                                    <span id="cd-mode-desc">Connecting to Gemini AI…</span>
+                                </div>
+                                <div class="cd-chips" id="cd-chips">
+                                    <button class="cd-chip" onclick="cdSendSuggestion(this)">What are common rice diseases?</button>
+                                    <button class="cd-chip" onclick="cdSendSuggestion(this)">How to prevent wheat rust?</button>
+                                    <button class="cd-chip" onclick="cdSendSuggestion(this)">My tomato leaves are turning yellow</button>
+                                    <button class="cd-chip" onclick="cdSendSuggestion(this)">White powder on leaves</button>
+                                </div>
+                            </div>
+                            <div class="cd-messages" id="cd-messages" style="display:none;"></div>
+                        </div>
+
+                        <!-- Weather panel -->
+                        <div id="cd-panel-weather" style="display:none;flex:1;overflow:hidden;flex-direction:column;" class="cd-panel">
+                            <div class="cd-panel-header">
+                                <h3>🌤 Live Weather Alerts <span style="font-size:11px;color:#52B788;font-weight:500;font-family:'DM Sans',sans-serif;">📍 Your Location</span></h3>
+                                <button class="cd-close-panel" onclick="cdShowPanel('chat')">✕</button>
+                            </div>
+                            <!-- Auto-location bar -->
+                            <div style="padding:10px 14px;border-bottom:1px solid #f0f0f0;background:#f9fff9;display:flex;flex-direction:column;gap:8px;">
+                                <div style="display:flex;gap:8px;align-items:center;">
+                                    <button class="cd-weather-btn" id="cd-locate-btn" onclick="cdAutoDetectWeather()" style="flex:1;display:flex;align-items:center;justify-content:center;gap:6px;">📍 Use My Location</button>
+                                    <div id="cd-location-tag" style="font-size:12px;color:#52B788;font-family:'DM Sans',sans-serif;font-weight:600;"></div>
+                                </div>
+                                <div style="display:flex;gap:6px;align-items:center;">
+                                    <input class="cd-city-input" id="cd-city-input" placeholder="Or type city name…" onkeydown="if(event.key==='Enter')cdGetWeatherByCity()" style="flex:1;" />
+                                    <button class="cd-weather-btn" onclick="cdGetWeatherByCity()" style="padding:9px 10px;font-size:12px;">Search</button>
+                                </div>
+                            </div>
+                            <div class="cd-weather-result" id="cd-weather-result">
+                                <div class="cd-no-alerts" id="cd-weather-placeholder">📍 Click <strong>Use My Location</strong> for instant local weather, or type a city name.</div>
+                            </div>
+                        </div>
+
+                        <!-- Input area -->
+                        <div class="cd-input-area" id="cd-input-area">
+                            <div class="cd-image-preview-wrap" id="cd-img-preview-wrap">
+                                <img class="cd-image-preview" id="cd-img-preview" src="" alt="preview" />
+                                <button class="cd-img-remove" onclick="cdRemoveImage()">✕</button>
+                            </div>
+                            <div class="cd-input-row">
+                                <input type="file" id="cd-file-input" accept="image/*" style="display:none" onchange="cdHandleImage(event)" />
+                                <button class="cd-upload-btn" onclick="document.getElementById('cd-file-input').click()" title="Upload crop photo">📷</button>
+                                <textarea class="cd-textarea" id="cd-textarea"
+                                    placeholder="Describe your crop issue or upload an image…"
+                                    rows="1"
+                                    onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();cdSend();}"
+                                    oninput="this.style.height='auto';this.style.height=Math.min(this.scrollHeight,120)+'px'"></textarea>
+                                <button class="cd-send-btn" id="cd-send-btn" onclick="cdSend()">➤</button>
+                            </div>
+                            <div class="cd-hint">CropDoc AI can make mistakes. Verify important information.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ── SETTINGS ── -->
+            <div id="section-settings" style="display:none;">
+                <h2 style="margin-bottom:24px;">Account Settings</h2>
+                <div class="card" style="padding:28px; max-width:600px;">
+                    <h3 style="margin-bottom:20px;">Profile Information</h3>
+                    <div class="form-group"><label class="form-label">Full Name</label><input type="text" class="form-control" id="settings-name" /></div>
+                    <div class="form-group"><label class="form-label">Email</label><input type="email" class="form-control" id="settings-email" /></div>
+                    <div class="form-group"><label class="form-label">Mobile</label><input type="tel" class="form-control" id="settings-mobile" /></div>
+                    <div class="form-group"><label class="form-label">City / District</label><input type="text" class="form-control" id="settings-city" /></div>
+                    <button class="btn btn-primary" onclick="saveSettings()">Save Changes</button>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <div class="toast-container" id="toast-container"></div>
+    <script src="../js/cart.js"></script>
+    <script src="../js/app.js"></script>
+    <script>
+    // ══════════════════════════════════════════════
+    //  KISANBAZAAR DASHBOARD LOGIC (unchanged)
+    // ══════════════════════════════════════════════
+    let ORDERS = [], MY_PRODUCTS = [], CURRENT_USER = null;
+    const statusBadge = {
+        pending:'badge-yellow', Confirmed:'badge-green', confirmed:'badge-green',
+        shipping:'badge-amber', delivered:'badge-green'
+    };
+
+    async function initDashboard() {
+        CURRENT_USER = KBSession.getUser();
+        if (!CURRENT_USER || CURRENT_USER.role !== 'farmer') {
+            window.location.href = 'login.html'; return;
+        }
+        const initial = CURRENT_USER.name ? CURRENT_USER.name[0].toUpperCase() : 'F';
+        document.getElementById('sidebar-avatar').textContent = initial;
+        document.getElementById('sidebar-name').textContent = CURRENT_USER.name;
+        document.getElementById('sidebar-role').textContent = `🌾 Farmer · ${CURRENT_USER.city || ''}`;
+        document.getElementById('dash-greeting').textContent = `Good Day, ${CURRENT_USER.name.split(' ')[0]}! 🌅`;
+
+        const navActions = document.getElementById('farmer-nav-actions');
+        if (navActions) navActions.innerHTML = `
+            <span style="font-size:14px;color:var(--text-muted);display:flex;align-items:center;gap:6px;">
+                <span style="width:28px;height:28px;border-radius:50%;background:var(--primary);color:#fff;display:inline-flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;">${initial}</span>
+                ${CURRENT_USER.name.split(' ')[0]}
+            </span>
+            <a href="#" class="btn btn-outline btn-sm" onclick="KBSession.logout();return false;">Sign Out</a>`;
+
+        document.getElementById('settings-name').value = CURRENT_USER.name || '';
+        document.getElementById('settings-email').value = CURRENT_USER.email || '';
+        document.getElementById('settings-mobile').value = CURRENT_USER.mobile || '';
+        document.getElementById('settings-city').value = CURRENT_USER.city || '';
+
+        try {
+            const [orders, products] = await Promise.all([
+                KBApi.request(`/api/orders?userId=${CURRENT_USER.id}&role=farmer`),
+                KBApi.request('/api/products')
+            ]);
+            ORDERS = orders;
+            MY_PRODUCTS = products.filter(p => p.farmerId === CURRENT_USER.id);
+            const pending = ORDERS.filter(o => o.status === 'Confirmed' || o.status === 'pending').length;
+            document.querySelectorAll('.orders-count').forEach(el => el.textContent = pending > 0 ? pending : '');
+            renderPreview(); populateStats(); populateEarnings();
+        } catch(err) { showToast('Failed to load dashboard data: ' + err.message, 'error'); }
+
+        cdInit();
+    }
+
+    function populateStats() {
+        document.getElementById('stat-earnings').textContent = '₹' + ORDERS.reduce((s,o)=>s+(o.total||0),0).toLocaleString('en-IN');
+        document.getElementById('stat-orders').textContent = ORDERS.length;
+        document.getElementById('stat-products').textContent = MY_PRODUCTS.length;
+    }
+
+    function populateEarnings() {
+        document.getElementById('earn-total').textContent = '₹' + ORDERS.reduce((s,o)=>s+(o.total||0),0).toLocaleString('en-IN');
+        document.getElementById('earn-orders').textContent = ORDERS.length;
+        document.getElementById('earn-delivered').textContent = ORDERS.filter(o=>o.status==='delivered').length;
+        const tbody = document.getElementById('earnings-tbody');
+        tbody.innerHTML = '';
+        if (!ORDERS.length) { tbody.innerHTML='<tr><td colspan="5" style="text-align:center;padding:32px;color:var(--text-muted);">No transactions yet.</td></tr>'; return; }
+        ORDERS.forEach(o => {
+            const itemsStr = (o.items||[]).map(i=>i.name).join(', ');
+            tbody.insertAdjacentHTML('beforeend',`<tr>
+                <td>${new Date(o.timestamp).toLocaleDateString('en-IN',{day:'numeric',month:'short'})}</td>
+                <td style="color:var(--primary);font-weight:700;">#${o.id.slice(-6).toUpperCase()}</td>
+                <td>${itemsStr}</td>
+                <td style="font-weight:700;">₹${(o.total||0).toLocaleString('en-IN')}</td>
+                <td><span class="badge ${statusBadge[o.status]||'badge-yellow'}">${o.status}</span></td>
+            </tr>`);
+        });
+    }
+
+    function renderOrders(list) {
+        const tb = document.getElementById('orders-tbody'); if (!tb) return; tb.innerHTML='';
+        if (!list.length) { tb.innerHTML='<tr><td colspan="8" style="text-align:center;padding:40px;color:var(--text-muted);">No orders found.</td></tr>'; return; }
+        list.forEach(o => {
+            const itemsStr=(o.items||[]).map(i=>i.name).join(', ');
+            const qtyStr=(o.items||[]).map(i=>`${i.qty} ${i.unit}`).join(', ');
+            const date=o.timestamp?new Date(o.timestamp).toLocaleDateString('en-IN',{day:'numeric',month:'short'}):'—';
+            tb.insertAdjacentHTML('beforeend',`<tr>
+                <td style="font-weight:700;color:var(--primary);">#${o.id.slice(-6).toUpperCase()}</td>
+                <td>${itemsStr}</td><td>${o.userName||'Buyer'}</td><td>${qtyStr}</td>
+                <td style="font-weight:700;">₹${(o.total||0).toLocaleString('en-IN')}</td><td>${date}</td>
+                <td><span class="badge ${statusBadge[o.status]||'badge-yellow'}">${o.status}</span></td>
+                <td>${(o.status==='pending'||o.status==='Confirmed')?`<button class="btn btn-outline btn-sm" onclick="updateOrderStatus('${o.id}','confirmed')">✅ Confirm</button>`:''}
+                ${o.status==='confirmed'?`<button class="btn btn-primary btn-sm" onclick="updateOrderStatus('${o.id}','delivered')">📦 Delivered</button>`:''}
+                ${o.status==='delivered'?`<span class="badge badge-green">Done</span>`:''}</td>
+            </tr>`);
+        });
+    }
+
+    async function updateOrderStatus(id, status) {
+        try {
+            await KBApi.request(`/api/orders/${id}`, 'PATCH', { status });
+            showToast(`Order updated to "${status}"`, 'success');
+            await initDashboard();
+            if (document.getElementById('section-orders').style.display !== 'none') renderOrders(ORDERS);
+        } catch(err) { showToast(err.message, 'error'); }
+    }
+
+    function filterOrders(type) { renderOrders(type==='all'?ORDERS:ORDERS.filter(o=>o.status===type)); }
+
+    function renderMyProducts() {
+        const grid = document.getElementById('my-products-grid'); if (!grid) return; grid.innerHTML='';
+        if (!MY_PRODUCTS.length) { grid.innerHTML='<div class="card" style="padding:40px;text-align:center;grid-column:1/-1;color:var(--text-muted);">No products yet. <a href="add-product.html" style="color:var(--primary);">Add your first product →</a></div>'; return; }
+        MY_PRODUCTS.forEach(p => {
+            const img=p.img?(p.img.startsWith('../')||p.img.startsWith('http')?p.img:'../'+p.img):'../images/products/tomatoes.png';
+            grid.insertAdjacentHTML('beforeend',`<div class="card" style="padding:20px;">
+                <div style="height:120px;display:flex;align-items:center;justify-content:center;border-radius:8px;overflow:hidden;background:#f9f9f9;">
+                    <img src="${img}" style="max-height:100%;max-width:100%;object-fit:contain;" onerror="this.src='../images/products/tomatoes.png'" /></div>
+                <h3 style="font-size:16px;margin:12px 0 8px;">${p.name}</h3>
+                <p style="color:var(--primary);font-weight:800;font-size:18px;margin-bottom:4px;">₹${p.price}/${p.unit}</p>
+                <p class="text-muted" style="font-size:13px;margin-bottom:16px;">Stock: ${p.qty||'∞'}</p>
+                <div style="display:flex;gap:8px;">
+                    <a href="add-product.html" class="btn btn-outline btn-sm" style="flex:1;text-align:center;">✏ Edit</a>
+                    <button class="btn btn-sm" style="flex:1;background:rgba(198,40,40,0.1);color:var(--error);border:none;" onclick="showToast('Delete coming soon','')">🗑 Delete</button>
+                </div></div>`);
+        });
+    }
+
+    function renderPreview() {
+        const tb = document.getElementById('dash-orders-preview'); if (!tb) return; tb.innerHTML='';
+        if (!ORDERS.length) { tb.innerHTML='<tr><td colspan="6" style="text-align:center;padding:32px;color:var(--text-muted);">No orders yet.</td></tr>'; return; }
+        ORDERS.slice(0,5).forEach(o => {
+            const itemsStr=(o.items||[]).map(i=>i.name).join(', ');
+            tb.insertAdjacentHTML('beforeend',`<tr>
+                <td style="font-weight:700;color:var(--primary);">#${o.id.slice(-6).toUpperCase()}</td>
+                <td>${itemsStr}</td><td>${o.userName||'Buyer'}</td>
+                <td style="font-weight:700;">₹${(o.total||0).toLocaleString('en-IN')}</td>
+                <td><span class="badge ${statusBadge[o.status]||'badge-yellow'}">${o.status}</span></td>
+                <td><button class="btn btn-outline btn-sm" onclick="showSection('orders')">Manage</button></td>
+            </tr>`);
+        });
+    }
+
+    const SECTIONS = ['dashboard','orders','my-products','earnings','reviews','settings','cropdoc'];
+    const sidebarMap = { dashboard:0,'my-products':2,orders:3,earnings:4,reviews:5,cropdoc:6,settings:7 };
+
+    function showSection(name) {
+        SECTIONS.forEach(s => {
+            const el = document.getElementById('section-'+s);
+            if (el) el.style.display = s===name ? 'block' : 'none';
+        });
+        document.querySelectorAll('.sidebar-nav a').forEach(a => a.classList.remove('active'));
+        const idx = sidebarMap[name];
+        const links = document.querySelectorAll('.sidebar-nav a');
+        if (idx !== undefined && links[idx]) links[idx].classList.add('active');
+        if (name==='orders') renderOrders(ORDERS);
+        if (name==='my-products') renderMyProducts();
+        if (name==='earnings') populateEarnings();
+    }
+
+    async function saveSettings() {
+        const name=document.getElementById('settings-name').value.trim();
+        const email=document.getElementById('settings-email').value.trim();
+        const mobile=document.getElementById('settings-mobile').value.trim();
+        const city=document.getElementById('settings-city').value.trim();
+        if (!name) { showToast('⚠ Name cannot be empty','error'); return; }
+        const updated={...CURRENT_USER,name,email,mobile,city};
+        KBSession.setUser(updated); CURRENT_USER=updated;
+        const initial=name[0].toUpperCase();
+        document.getElementById('sidebar-avatar').textContent=initial;
+        document.getElementById('sidebar-name').textContent=name;
+        document.getElementById('sidebar-role').textContent=`🌾 Farmer · ${city}`;
+        document.getElementById('dash-greeting').textContent=`Good Day, ${name.split(' ')[0]}! 🌅`;
+        const nav=document.getElementById('farmer-nav-actions');
+        if (nav) nav.innerHTML=`
+            <span style="font-size:14px;color:var(--text-muted);display:flex;align-items:center;gap:6px;">
+                <span style="width:28px;height:28px;border-radius:50%;background:var(--primary);color:#fff;display:inline-flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;">${initial}</span>
+                ${name.split(' ')[0]}</span>
+            <a href="#" class="btn btn-outline btn-sm" onclick="KBSession.logout();return false;">Sign Out</a>`;
+        try { await KBApi.request('/api/users/'+CURRENT_USER.id,'PATCH',{name,email,mobile,city}); } catch(e){}
+        showToast('✅ Profile updated!','success');
+    }
+
+    document.addEventListener('DOMContentLoaded', initDashboard);
+
+
+    // ══════════════════════════════════════════════════════════════
+    //  CROPDOC AI — 100% OFFLINE (no MongoDB, no API key needed)
+    //  Disease matching + Weather via open-meteo.com (free, no key)
+    // ══════════════════════════════════════════════════════════════
+
+    // ── Offline disease database (Removed) ──
+
+    // Weather-based disease risk rules (all offline, weather fetched directly)
+    const CD_WEATHER_RULES = [
+        { disease_en:'Late Blight', disease_hi:'अगेती अंगमारी', crops:'Potato, Tomato', conditions_en:'High humidity (>80%) + Cool 15-22°C + Rain', conditions_hi:'उच्च नमी (>80%) + ठंडा तापमान + बारिश', check:(h,t,r)=>h>80&&t>=15&&t<=22&&r>2 },
+        { disease_en:'Rice Blast', disease_hi:'धान का ब्लास्ट', crops:'Rice, Paddy', conditions_en:'High humidity (>85%) + Moderate 22-28°C', conditions_hi:'उच्च नमी (>85%) + मध्यम तापमान', check:(h,t)=>h>85&&t>=22&&t<=28 },
+        { disease_en:'Wheat Rust', disease_hi:'गेहूं का रतुआ', crops:'Wheat', conditions_en:'Humidity (>60%) + Cool 10-20°C + Dew', conditions_hi:'नमी (>60%) + ठंडा तापमान + ओस', check:(h,t)=>h>60&&t>=10&&t<=20 },
+        { disease_en:'Powdery Mildew', disease_hi:'पाउडरी मिल्ड्यू', crops:'Wheat, Pea, Grapes, Cucumber', conditions_en:'Moderate humidity 50-70% + Warm 20-30°C', conditions_hi:'मध्यम नमी + गर्म तापमान + सूखा', check:(h,t,r)=>h>=50&&h<=70&&t>=20&&t<=30&&r<1 },
+        { disease_en:'Downy Mildew', disease_hi:'मृदु रोमिल आसिता', crops:'Grapes, Cucumber, Melon', conditions_en:'Very high humidity (>90%) + Warm 18-25°C', conditions_hi:'बहुत उच्च नमी (>90%) + गर्म', check:(h,t)=>h>90&&t>=18&&t<=25 },
+        { disease_en:'Bacterial Leaf Blight', disease_hi:'जीवाणु पत्ती अंगमारी', crops:'Rice', conditions_en:'High humidity (>80%) + Warm 25-34°C + Heavy rain', conditions_hi:'उच्च नमी + गर्म तापमान + भारी बारिश', check:(h,t,r)=>h>80&&t>=25&&t<=34&&r>5 },
+        { disease_en:'Aphid Infestation', disease_hi:'एफिड प्रकोप', crops:'Mustard, Wheat, Vegetables', conditions_en:'Warm dry 20-30°C + Low rainfall', conditions_hi:'गर्म सूखा मौसम + कम बारिश', check:(h,t,r)=>t>=20&&t<=30&&r<2&&h<65 }
+    ];
+
+    // ── State ──
+    let cdLang = 'en';
+    // Sessions & messages are now stored on the Python backend (MongoDB)
+    // We keep a local cache for display speed
+    let cdSessions = [];           // [{id, title, language, created_at}]
+    let cdMessages = {};           // sessionId → messages array (local cache)
+    let cdActiveSession = null;
+    let cdLoading = false;
+    let cdImageBase64 = null, cdImageMime = null;
+    let cdCurrentPanel = 'chat';
+    let cdUserInitial = 'F';
+    let cdOnline = false;          // true = Python GPT-4o backend is running
+
+    // Auth headers for proxied requests
+    function cdAuthHeaders() {
+        return {
+            'Content-Type': 'application/json',
+            'x-user-id':   CURRENT_USER ? CURRENT_USER.id   : '',
+            'x-user-role': CURRENT_USER ? CURRENT_USER.role : 'farmer'
+        };
+    }
+
+    async function cdInit() {
+        cdUserInitial = CURRENT_USER ? (CURRENT_USER.name[0].toUpperCase()) : 'F';
+        await cdCheckOnlineStatus();
+    }
+
+    async function cdCheckOnlineStatus() {
+        const badge  = document.getElementById('cd-mode-badge');
+        const notice = document.getElementById('cd-mode-notice');
+        const title  = document.getElementById('cd-mode-title');
+        const desc   = document.getElementById('cd-mode-desc');
+        try {
+            const res = await fetch('http://localhost:8000/api/');
+            const data = await res.json();
+            if (data.status !== 'online') throw new Error('offline');
+            cdOnline = true;
+            if (badge)  { badge.textContent = '🤖 AI Online (Gemini)'; badge.style.background='#e8f5e9'; badge.style.color='#1B4332'; badge.style.borderColor='#c8e6c3'; }
+            if (title)  title.textContent = '🤖 Powered by Google Gemini (Your CropDoc AI)';
+            if (desc)   desc.textContent  = 'Online — full AI image recognition. Upload any crop disease photo for instant expert diagnosis!';
+            if (notice) { notice.style.background='#e8f5e9'; notice.style.borderColor='#c8e6c3'; notice.style.color='#1B4332'; }
+            // Load sessions from Python backend
+            await cdLoadSessions();
+        } catch(e) {
+            cdOnline = false;
+            if (badge)  { badge.textContent = '🔌 Offline Mode'; badge.style.background='#fff8e1'; badge.style.color='#f59e0b'; badge.style.borderColor='#fde68a'; }
+            if (title)  title.textContent = '🔌 Offline Mode (Python backend not running)';
+            if (desc)   desc.textContent  = 'Start the CropDoc backend: run start-cropdoc-backend.bat. Online AI requires the backend.';
+            if (notice) { notice.style.background='#fff8e1'; notice.style.borderColor='#fde68a'; notice.style.color='#92400e'; }
+            // Fall back to localStorage sessions for offline mode
+            cdSessions = JSON.parse(localStorage.getItem('cropdoc_sessions') || '[]');
+            cdSessions.forEach(s => {
+                const saved = localStorage.getItem('cropdoc_msgs_' + s.id);
+                if (saved) cdMessages[s.id] = JSON.parse(saved);
+            });
+            cdRenderSessions();
+        }
+    }
+
+    async function cdLoadSessions() {
+        try {
+            const res = await fetch('http://localhost:8000/api/chat/sessions', { headers: cdAuthHeaders() });
+            const data = await res.json();
+            if (Array.isArray(data)) {
+                cdSessions = data;
+                cdRenderSessions();
+            }
+        } catch(e) { /* ignore */ }
+    }
+
+    // ── Sessions ──
+    function cdRenderSessions() {
+        const list = document.getElementById('cd-sessions-list'); if (!list) return;
+        if (!cdSessions.length) { list.innerHTML='<div style="font-size:12px;color:#ccc;padding:8px;font-family:DM Sans,sans-serif;">No conversations yet</div>'; return; }
+        list.innerHTML = '';
+        cdSessions.forEach(s => {
+            list.insertAdjacentHTML('beforeend', `
+                <div class="cd-session-item ${cdActiveSession===s.id?'active':''}" onclick="cdSelectSession('${s.id}')">
+                    <span class="cd-session-title" title="${s.title || 'Chat'}">💬 ${s.title || 'Chat'}</span>
+                    <button class="cd-session-del" onclick="event.stopPropagation();cdDeleteSession('${s.id}')">🗑</button>
+                </div>`);
+        });
+    }
+
+    async function cdSelectSession(id) {
+        cdActiveSession = id;
+        cdRenderSessions();
+        // Load messages from backend if online, else from cache
+        if (cdOnline && !cdMessages[id]) {
+            try {
+                const res = await fetch('http://localhost:8000/api/chat/sessions/' + id + '/messages', { headers: cdAuthHeaders() });
+                const data = await res.json();
+                if (Array.isArray(data)) cdMessages[id] = data.map(m => ({ ...m, role: m.role, text: m.text }));
+            } catch(e) { /* use cache */ }
+        }
+        cdShowMessages();
+    }
+
+    async function cdNewChat() {
+        if (cdOnline) {
+            try {
+                const res = await fetch('http://localhost:8000/api/chat/sessions', {
+                    method: 'POST',
+                    headers: cdAuthHeaders(),
+                    body: JSON.stringify({ title: 'New Chat', language: cdLang })
+                });
+                const session = await res.json();
+                if (session.id) {
+                    cdSessions.unshift(session);
+                    cdActiveSession = session.id;
+                    cdMessages[session.id] = [];
+                    cdRenderSessions();
+                    cdShowWelcome();
+                    return;
+                }
+            } catch(e) { /* fall through to offline */ }
+        }
+        // Offline fallback
+        const id = 'session_' + Date.now();
+        const session = { id, title:'New Chat', created_at: new Date().toISOString() };
+        cdSessions.unshift(session);
+        cdMessages[id] = [];
+        cdActiveSession = id;
+        localStorage.setItem('cropdoc_sessions', JSON.stringify(cdSessions));
+        cdRenderSessions();
+        cdShowWelcome();
+    }
+
+    async function cdDeleteSession(id) {
+        if (cdOnline) {
+            try {
+                await fetch('http://localhost:8000/api/chat/sessions/' + id, { method: 'DELETE', headers: cdAuthHeaders() });
+            } catch(e) { /* ignore */ }
+        } else {
+            localStorage.removeItem('cropdoc_msgs_' + id);
+            const lsSessions = JSON.parse(localStorage.getItem('cropdoc_sessions') || '[]').filter(s => s.id !== id);
+            localStorage.setItem('cropdoc_sessions', JSON.stringify(lsSessions));
+        }
+        cdSessions = cdSessions.filter(s => s.id !== id);
+        delete cdMessages[id];
+        if (cdActiveSession === id) { cdActiveSession = null; cdShowWelcome(); }
+        cdRenderSessions();
+    }
+
+    // Removed cdOfflineRespond
+
+    // ── Send ──
+    async function cdSend() {
+        if (cdLoading) return;
+        const ta = document.getElementById('cd-textarea');
+        const text = ta.value.trim();
+        const hasImg = !!cdImageBase64;
+        if (!text && !hasImg) return;
+
+        // Ensure we have an active session
+        if (!cdActiveSession) await cdNewChat();
+
+        const msgs = cdMessages[cdActiveSession] = cdMessages[cdActiveSession] || [];
+        const userMsg = {
+            id: 'u'+Date.now(), role:'user', text,
+            _image: hasImg ? `data:${cdImageMime};base64,${cdImageBase64}` : null,
+            created_at: new Date().toISOString()
+        };
+        msgs.push(userMsg);
+
+        // Capture image before clearing
+        const sentImageBase64 = cdImageBase64;
+        const sentImageMime   = cdImageMime;
+
+        ta.value = ''; ta.style.height = 'auto';
+        cdRemoveImage();
+
+        // Update session title locally
+        const sess = cdSessions.find(s=>s.id===cdActiveSession);
+        if (sess && (sess.title === 'New Chat' || !sess.title) && (text || hasImg)) {
+            sess.title = (text || '📷 Photo').slice(0, 40);
+            cdRenderSessions();
+        }
+
+        cdShowMessages();
+        cdLoading = true;
+        document.getElementById('cd-send-btn').disabled = true;
+        cdAppendTyping();
+
+        let responseText;
+
+        if (cdOnline) {
+            // ── ONLINE: proxy to Python GPT-4o backend (original CropDoc method) ──
+            try {
+                const payload = {
+                    session_id:   cdActiveSession,
+                    text:         text || '',
+                    language:     cdLang,
+                    image_base64: sentImageBase64 || null,     // exact field name from original
+                    image_mime:   sentImageMime || 'image/jpeg'
+                };
+                const apiRes = await fetch('http://localhost:8000/api/chat/send', {
+                    method: 'POST',
+                    headers: cdAuthHeaders(),
+                    body: JSON.stringify(payload)
+                });
+                const data = await apiRes.json();
+                if (apiRes.ok && data.text) {
+                    responseText = data.text;
+                    // Cache the AI response
+                    msgs.push({ id: data.id || 'a'+Date.now(), role:'assistant', text: responseText, created_at: data.created_at || new Date().toISOString() });
+                } else if (apiRes.status === 503 || apiRes.status === 404) {
+                    cdOnline = false;
+                    responseText = `⚠️ **CropDoc backend went offline.** Please restart the backend server.`;
+                    msgs.push({ id:'a'+Date.now(), role:'assistant', text:responseText, created_at:new Date().toISOString() });
+                } else {
+                    responseText = `⚠️ **AI Error:** ${data.error || 'Unknown error'}`;
+                    msgs.push({ id:'a'+Date.now(), role:'assistant', text:responseText, created_at:new Date().toISOString() });
+                }
+            } catch(netErr) {
+                responseText = `⚠️ **Connection failed.** Please ensure the backend is running.`;
+                msgs.push({ id:'a'+Date.now(), role:'assistant', text:responseText, created_at:new Date().toISOString() });
+            }
+        } else {
+            // ── OFFLINE mode error ──
+            responseText = `⚠️ **AI Online Mode Required**\n\nThe offline database has been removed. Please ensure CropDoc AI backend is running and connected.`;
+            msgs.push({ id:'a'+Date.now(), role:'assistant', text:responseText, created_at:new Date().toISOString() });
+        }
+
+        cdRemoveTyping();
+        cdLoading = false;
+        document.getElementById('cd-send-btn').disabled = false;
+        cdShowMessages();
+        cdRenderSessions();
+    }
+
+    function cdSendSuggestion(btn) { document.getElementById('cd-textarea').value = btn.textContent; cdSend(); }
+
+    function cdShowWelcome() {
+        document.getElementById('cd-welcome').style.display = 'flex';
+        document.getElementById('cd-messages').style.display = 'none';
+        const chips = document.getElementById('cd-chips');
+        const t = cdLang === 'hi'
+            ? ['What are common rice diseases?', 'How to prevent wheat rust?', 'My tomato leaves are turning yellow', 'White powder on leaves']
+            : ['What are common rice diseases?', 'How to prevent wheat rust?', 'My tomato leaves are turning yellow', 'White powder on leaves'];
+        chips.innerHTML = t.map(c => '<button class="cd-chip" onclick="cdSendSuggestion(this)">'+c+'</button>').join('');
+    }
+
+    function cdShowMessages() {
+        const msgs = cdActiveSession ? (cdMessages[cdActiveSession] || []) : [];
+        if (!msgs.length) { cdShowWelcome(); return; }
+        document.getElementById('cd-welcome').style.display = 'none';
+        const el = document.getElementById('cd-messages');
+        el.style.display = 'flex';
+        el.innerHTML = '';
+        const isLastAI = (i, arr) => arr[i].role === 'assistant' && (i === arr.length - 1);
+        msgs.forEach((msg, i) => {
+            const isUser = msg.role === 'user';
+            const imgHtml = msg._image ? '<img src="'+msg._image+'" alt="crop photo">' : '';
+            const textHtml = isUser ? (msg.text||'') : cdMd(msg.text||'');
+            // Quick action chips only after the last AI message
+            const chipsHtml = (!isUser && isLastAI(i, msgs)) ? cdQuickChips() : '';
+            el.insertAdjacentHTML('beforeend',
+                '<div class="cd-msg '+(isUser?'user':'ai')+'">' +
+                '<div class="cd-avatar">'+(isUser?cdUserInitial:'🌿')+'</div>' +
+                '<div style="display:flex;flex-direction:column;gap:8px;min-width:0;max-width:74%;">' +
+                '<div class="cd-bubble">'+imgHtml+textHtml+'</div>' +
+                chipsHtml +
+                '</div></div>');
+        });
+        el.scrollTop = el.scrollHeight;
+    }
+
+    function cdAppendTyping() {
+        const el = document.getElementById('cd-messages');
+        document.getElementById('cd-welcome').style.display = 'none';
+        el.style.display = 'flex';
+        el.insertAdjacentHTML('beforeend','<div class="cd-msg ai" id="cd-typing-row"><div class="cd-avatar">🌿</div><div style="display:flex;flex-direction:column;"><div class="cd-bubble"><div class="cd-typing"><span></span><span></span><span></span></div></div></div></div>');
+        el.scrollTop = el.scrollHeight;
+    }
+
+    // ── Quick Action Chips (shown after each AI response) ──
+    function cdQuickChips() {
+        const isHi = cdLang === 'hi';
+        const chips = isHi ? [
+            { icon:'💧', label:'प्रति एकड़ छिड़काव मात्रा', q:'Show spray dosage per acre for my crop' },
+            { icon:'🌱', label:'मिट्टी पर प्रभाव', q:'What is the effect on soil health?' },
+            { icon:'🛒', label:'सर्वोत्तम ब्रांड सुझाएं', q:'Suggest best brands to buy for this treatment in India' },
+            { icon:'🌿', label:'जैविक विकल्प', q:'Give organic alternatives with dosage' },
+            { icon:'⚠️', label:'उर्वरक सिफारिश', q:'Give fertilizer recommendation for this crop' },
+            { icon:'🔒', label:'सावधानियां दिखाएं', q:'Show all precautions for this disease' }
+        ] : [
+            { icon:'💧', label:'Show spray dosage per acre', q:'Show spray dosage per acre for this disease' },
+            { icon:'🌱', label:'Effect on soil health', q:'What is the effect on soil health for each recommended chemical?' },
+            { icon:'🛒', label:'Suggest best brands to buy', q:'Suggest best brands to buy for this treatment in India with prices' },
+            { icon:'🌿', label:'Organic alternatives with dosage', q:'Give organic alternatives with exact dosage for this disease' },
+            { icon:'⚠️', label:'Fertilizer recommendation', q:'Give detailed fertilizer recommendation for this crop' },
+            { icon:'🔒', label:'Show precautions', q:'Show all precautions to prevent this disease from spreading' }
+        ];
+        return '<div class="cd-quick-chips">' +
+            chips.map(c => `<button class="cd-quick-chip" onclick="cdQuickAsk(\`${c.q}\`)">${c.icon} ${c.label}</button>`).join('') +
+            '</div>';
+    }
+
+    function cdQuickAsk(question) {
+        document.getElementById('cd-textarea').value = question;
+        cdSend();
+    }
+
+    // ── Export Chat ──
+    function cdExportChat() {
+        const msgs = cdActiveSession ? (cdMessages[cdActiveSession] || []) : [];
+        if (!msgs.length) { alert('No chat to export.'); return; }
+        let text = 'CropDoc AI — Chat Export\n' + '='.repeat(40) + '\n\n';
+        msgs.forEach(m => {
+            const role = m.role === 'user' ? 'You' : 'CropDoc AI';
+            text += `[${role}]\n${m.text || ''}\n\n`;
+        });
+        const blob = new Blob([text], { type: 'text/plain' });
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = 'cropdoc-chat-' + new Date().toISOString().slice(0,10) + '.txt';
+        a.click();
+    }
+
+    function cdRemoveTyping() { const r=document.getElementById('cd-typing-row'); if(r) r.remove(); }
+
+    function cdMd(md) {
+        return md.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+            .replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>')
+            .replace(/^## (.+)$/gm,'<h2>$1</h2>').replace(/^### (.+)$/gm,'<h3>$1</h3>')
+            .replace(/^---$/gm,'<hr>').replace(/`([^`]+)`/g,'<code>$1</code>')
+            .replace(/\[(.+?)\]\((https?:\/\/[^\)]+)\)/g,'<a href="$2" target="_blank">$1</a>')
+            .replace(/^- (.+)$/gm,'<li>$1</li>').replace(/(<li>[\s\S]*?<\/li>)+/g,'<ul>$&</ul>')
+            .replace(/\n{2,}/g,'<br><br>').replace(/\n/g,'<br>');
+    }
+
+    function cdShowPanel(panel) {
+        cdCurrentPanel = panel;
+        document.getElementById('cd-chat-area').style.display    = panel==='chat'    ? 'flex'  : 'none';
+        document.getElementById('cd-panel-weather').style.display = panel==='weather' ? 'flex'  : 'none';
+        document.getElementById('cd-input-area').style.display    = panel==='chat'    ? 'block' : 'none';
+        document.getElementById('cd-tool-weather').classList.toggle('active', panel==='weather');
+        if (panel==='weather' && !cdWeatherFetched) cdAutoDetectWeather();
+    }
+
+
+
+    let cdWeatherFetched = false;
+
+    // Auto-called when weather panel opens for the first time
+    async function cdAutoDetectWeather() {
+        const res = document.getElementById('cd-weather-result');
+        const locBtn = document.getElementById('cd-locate-btn');
+        const locTag = document.getElementById('cd-location-tag');
+
+        if (!navigator.geolocation) {
+            res.innerHTML = '<div class="cd-no-alerts" style="color:#e53e3e;">⚠ Geolocation not supported by your browser. Use the city search below.</div>';
+            return;
+        }
+
+        locBtn.disabled = true;
+        locBtn.textContent = '⏳ Detecting…';
+        res.innerHTML = `
+            <div style="text-align:center;padding:36px 16px;">
+                <div style="font-size:36px;margin-bottom:12px;animation:cd-bounce 1.2s infinite;">📍</div>
+                <div style="font-size:14px;color:#2D6A4F;font-weight:700;font-family:'Outfit',sans-serif;">Detecting your exact location…</div>
+                <div style="font-size:12px;color:#aaa;margin-top:6px;font-family:'DM Sans',sans-serif;">Allow location access when your browser asks</div>
+            </div>`;
+
+        navigator.geolocation.getCurrentPosition(
+            async (position) => {
+                const { latitude: lat, longitude: lon, accuracy } = position.coords;
+                locBtn.textContent = '🔄 Refresh';
+                locBtn.disabled = false;
+                cdWeatherFetched = true;
+                await cdFetchWeatherByCoords(lat, lon, null, null, accuracy);
+            },
+            (err) => {
+                locBtn.textContent = '📍 Use My Location';
+                locBtn.disabled = false;
+                const msg = {
+                    1: 'Location access was denied. Please allow location permission in your browser settings and try again.',
+                    2: 'Your location is currently unavailable. Please use the city search below.',
+                    3: 'Location request timed out. Try again or use city search.'
+                }[err.code] || 'Could not detect your location.';
+                res.innerHTML = `
+                    <div style="background:#fffbeb;border:1.5px solid #fde68a;border-radius:10px;padding:14px 16px;margin-bottom:12px;font-size:13px;color:#92400e;font-family:'DM Sans',sans-serif;">
+                        🔒 ${msg}
+                    </div>
+                    <div class="cd-no-alerts">Use the city search above to check weather anywhere.</div>`;
+            },
+            { timeout: 12000, maximumAge: 300000, enableHighAccuracy: false }
+        );
+    }
+
+    // Core function: fetch weather by lat/lon + reverse geocode city name
+    async function cdFetchWeatherByCoords(lat, lon, overrideName, overrideCountry, accuracy) {
+        const res = document.getElementById('cd-weather-result');
+        const locTag = document.getElementById('cd-location-tag');
+        try {
+            // Run weather fetch + reverse geocode in parallel
+            const [wxRes, revRes] = await Promise.all([
+                fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,relative_humidity_2m,precipitation,wind_speed_10m,weather_code,apparent_temperature&timezone=auto`),
+                overrideName ? Promise.resolve(null) : fetch(`https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lon}&format=json&zoom=10&accept-language=en`, { headers: { 'Accept-Language': 'en' } })
+            ]);
+
+            const wxData = await wxRes.json();
+            let cityName = overrideName || 'Your Location';
+            let country  = overrideCountry || '';
+
+            if (revRes) {
+                try {
+                    const revData = await revRes.json();
+                    const addr = revData.address || {};
+                    cityName = addr.city || addr.town || addr.village || addr.county || addr.state_district || 'Your Location';
+                    country  = addr.country || '';
+                } catch(e2) { /* use default */ }
+            }
+
+            if (locTag) locTag.textContent = `📍 ${cityName}`;
+
+            const cur   = wxData.current || {};
+            const temp  = Math.round(cur.temperature_2m ?? 25);
+            const feels = Math.round(cur.apparent_temperature ?? temp);
+            const hum   = cur.relative_humidity_2m ?? 60;
+            const prec  = cur.precipitation ?? 0;
+            const wind  = cur.wind_speed_10m ?? 0;
+            const code  = cur.weather_code ?? 0;
+            const wxDesc = cdWeatherCodeDesc(code);
+            const isHi   = cdLang === 'hi';
+
+            // Disease risk calculation
+            const alerts = [];
+            CD_WEATHER_RULES.forEach(rule => {
+                if (rule.check(hum, temp, prec)) {
+                    const severity = rule.check(hum + 5, temp, prec + 2) ? 'HIGH' : 'MEDIUM';
+                    alerts.push({ ...rule, severity });
+                }
+            });
+
+            const accText = accuracy ? `<span style="opacity:0.65;font-size:10px;"> (±${Math.round(accuracy)}m)</span>` : '';
+
+            res.innerHTML = `
+                <div class="cd-weather-card">
+                    <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px;">
+                        <div>
+                            <div class="cd-weather-city">📍 ${cityName}${country ? ', ' + country : ''}${accText}</div>
+                            <div style="font-size:12px;opacity:0.8;font-family:'DM Sans',sans-serif;margin-top:2px;">${wxDesc.emoji} ${isHi ? wxDesc.hi : wxDesc.en}</div>
+                        </div>
+                        <div style="font-size:38px;line-height:1;">${wxDesc.emoji}</div>
+                    </div>
+                    <div class="cd-weather-stats">
+                        <div class="cd-weather-stat"><strong>${temp}°C</strong>${isHi ? 'तापमान' : 'Temperature'}</div>
+                        <div class="cd-weather-stat"><strong>${feels}°C</strong>${isHi ? 'अनुभव' : 'Feels Like'}</div>
+                        <div class="cd-weather-stat"><strong>${hum}%</strong>${isHi ? 'नमी' : 'Humidity'}</div>
+                        <div class="cd-weather-stat"><strong>${prec}mm</strong>${isHi ? 'वर्षा' : 'Rainfall'}</div>
+                        <div class="cd-weather-stat"><strong>${wind}km/h</strong>${isHi ? 'हवा' : 'Wind'}</div>
+                        <div class="cd-weather-stat"><strong>${new Date().toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' })}</strong>${isHi ? 'अभी' : 'Live Now'}</div>
+                    </div>
+                </div>
+                ${alerts.length === 0
+                    ? '<div class="cd-no-alerts">No disease risk - weather looks safe for your crops!</div>'
+                    : '<div class="cd-alerts-title">Disease Risk Alert(s) at Your Location</div>' +
+                       alerts.map(function(a) {
+                           var dis = isHi ? a.disease_hi : a.disease_en;
+                           return '<div class="cd-alert-card ' + a.severity + '" onclick="cdAskWeatherDisease(\'' + dis.replace(/'/g,"'") + '\')">' +
+                               '<div class="cd-alert-disease">' + dis + '</div>' +
+                               '<div class="cd-alert-crops">Crops: ' + a.crops + '</div>' +
+                               '<span class="cd-alert-badge ' + a.severity + '">' + a.severity + ' RISK</span>' +
+                               '<div style="font-size:11px;color:#666;margin-top:4px;">' + (isHi ? a.conditions_hi : a.conditions_en) + '</div>' +
+                               '<div style="font-size:11px;color:#52B788;margin-top:4px;font-weight:600;">Click to ask AI for prevention tips</div>' +
+                               '</div>';
+                       }).join('')
+                }`;
+        } catch(e) {
+            res.innerHTML = '<div class="cd-no-alerts" style="color:#e53e3e;">Could not fetch weather data. Check internet connection. ' + e.message + '</div>';
+        }
+    }
+
+    function cdAskWeatherDisease(name) {
+        cdShowPanel('chat');
+        document.getElementById('cd-textarea').value = 'What precautions should I take for ' + name + ' given current weather conditions?';
+        cdSend();
+    }
+
+    // ── cdGetWeatherByCity ──
+    async function cdGetWeatherByCity() {
+        const input = document.getElementById('cd-city-input');
+        const city = (input ? input.value : '').trim();
+        if (!city) return;
+        const res = document.getElementById('cd-weather-result');
+        res.innerHTML = `<div style="text-align:center;padding:36px 16px;">
+            <div style="font-size:36px;margin-bottom:12px;">🌐</div>
+            <div style="font-size:14px;color:#2D6A4F;font-weight:700;font-family:'Outfit',sans-serif;">Searching for ${city}…</div>
+        </div>`;
+        try {
+            const geoRes = await fetch(`https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(city)}&format=json&limit=1&accept-language=en`);
+            const geoData = await geoRes.json();
+            if (!geoData.length) {
+                res.innerHTML = '<div class="cd-no-alerts" style="color:#e53e3e;">City not found. Try a different name.</div>';
+                return;
+            }
+            const { lat, lon, display_name } = geoData[0];
+            const nameParts = display_name.split(',');
+            const cityName = nameParts[0].trim();
+            const country  = nameParts[nameParts.length - 1].trim();
+            cdWeatherFetched = true;
+            await cdFetchWeatherByCoords(parseFloat(lat), parseFloat(lon), cityName, country, null);
+        } catch(e) {
+            res.innerHTML = '<div class="cd-no-alerts" style="color:#e53e3e;">Failed to fetch city data: ' + e.message + '</div>';
+        }
+    }
+
+    // ── cdWeatherCodeDesc: WMO code → emoji + text ──
+    function cdWeatherCodeDesc(code) {
+        if (code === 0)  return { emoji:'☀️',  en:'Clear Sky',          hi:'साफ आसमान' };
+        if (code <= 2)   return { emoji:'⛅',  en:'Partly Cloudy',      hi:'आंशिक बादल' };
+        if (code === 3)  return { emoji:'☁️',  en:'Overcast',           hi:'पूरे बादल' };
+        if (code <= 49)  return { emoji:'🌫️', en:'Foggy / Hazy',       hi:'कोहरा' };
+        if (code <= 59)  return { emoji:'🌦️', en:'Drizzle',            hi:'बूंदाबांदी' };
+        if (code <= 69)  return { emoji:'🌧️', en:'Rain',               hi:'बारिश' };
+        if (code <= 79)  return { emoji:'❄️',  en:'Snow / Sleet',       hi:'बर्फ' };
+        if (code <= 84)  return { emoji:'🌦️', en:'Rain Showers',       hi:'बौछार' };
+        if (code <= 94)  return { emoji:'⛈️', en:'Thunderstorm',       hi:'तूफान' };
+        return             { emoji:'⛈️', en:'Severe Thunderstorm', hi:'भारी तूफान' };
+    }
+
+    // ── Language toggle ──
+    function cdToggleLang() {
+        cdLang = cdLang === 'en' ? 'hi' : 'en';
+        document.getElementById('cd-lang-btn').textContent = cdLang==='en' ? 'हिंदी' : 'English';
+        if (!cdActiveSession || !(cdMessages[cdActiveSession]||[]).length) cdShowWelcome();
+    }
+
+    // ── Image ──
+    function cdHandleImage(e) {
+        const file = e.target.files[0]; if (!file) return;
+        cdImageMime = file.type || 'image/jpeg';
+        const reader = new FileReader();
+        reader.onload = ev => {
+            cdImageBase64 = ev.target.result.split(',')[1];
+            document.getElementById('cd-img-preview').src = ev.target.result;
+            document.getElementById('cd-img-preview-wrap').classList.add('show');
+        };
+        reader.readAsDataURL(file);
+        e.target.value = '';
+    }
+
+    function cdRemoveImage() {
+        cdImageBase64 = null; cdImageMime = null;
+        document.getElementById('cd-img-preview-wrap').classList.remove('show');
+        document.getElementById('cd-img-preview').src = '';
+    }
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Add Product — KisanBazaar</title>
+    <link rel="stylesheet" href="../css/style.css" />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;600;700;800&display=swap" rel="stylesheet" />
+</head>
+
+<body>
+
+    <nav class="navbar">
+        <a href="../index.html" class="navbar-brand">🌿 KisanBazaar</a>
+        <ul class="navbar-nav">
+            <li><a href="farmer-dashboard.html">Dashboard</a></li>
+            <li><a href="add-product.html" class="active">Add Product</a></li>
+            <li><a href="../products.html">Browse</a></li>
+        </ul>
+        <div class="navbar-actions" id="add-nav-actions">
+            <a href="farmer-dashboard.html" class="btn btn-outline btn-sm">← Dashboard</a>
+        </div>
+    </nav>
+
+    <div class="dashboard">
+        <aside class="sidebar">
+            <div class="sidebar-user">
+                <div class="sidebar-avatar" id="sidebar-avatar">F</div>
+                <div class="sidebar-name" id="sidebar-name">Loading…</div>
+                <div class="sidebar-role" id="sidebar-role">🌾 Farmer</div>
+            </div>
+            <ul class="sidebar-nav">
+                <li><a href="farmer-dashboard.html"><span class="icon">📊</span> Dashboard</a></li>
+                <li><a href="add-product.html" class="active"><span class="icon">➕</span> Add Product</a></li>
+                <li><a href="farmer-dashboard.html?section=my-products"><span class="icon">📦</span> My Products</a></li>
+                <li><a href="farmer-dashboard.html?section=orders"><span class="icon">🛒</span> Orders</a></li>
+                <li><a href="farmer-dashboard.html?section=earnings"><span class="icon">💰</span> Earnings</a></li>
+                <li><a href="#" onclick="KBSession.logout();return false;"><span class="icon">🚪</span> Sign Out</a></li>
+            </ul>
+        </aside>
+
+        <main class="dashboard-main">
+            <h2 style="margin-bottom:8px;">Add New Product</h2>
+            <p class="text-muted" style="margin-bottom:32px;">Fill in the details about your fresh produce</p>
+
+            <form onsubmit="submitProduct(event)" style="max-width:700px;">
+                <!-- Product Name -->
+                <div class="form-group">
+                    <label class="form-label">Product Name *</label>
+                    <input type="text" class="form-control" id="prod-name" placeholder="e.g., Fresh Tomatoes" required />
+                </div>
+
+                <!-- Category + Unit (2-col) -->
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px;">
+                    <div class="form-group">
+                        <label class="form-label">Category *</label>
+                        <select class="form-control" id="prod-category" required>
+                            <option value="">Select category</option>
+                            <option>Vegetables</option>
+                            <option>Fruits</option>
+                            <option>Grains</option>
+                            <option>Pulses</option>
+                            <option>Dairy</option>
+                            <option>Organic</option>
+                            <option>Spices</option>
+                            <option>Oil Seeds</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Unit *</label>
+                        <select class="form-control" id="prod-unit" required>
+                            <option value="">Select unit</option>
+                            <option>kg</option>
+                            <option>gram</option>
+                            <option>litre</option>
+                            <option>piece</option>
+                            <option>dozen</option>
+                            <option>quintal</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Price + Available Qty -->
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px;">
+                    <div class="form-group">
+                        <label class="form-label">Price per Unit (₹) *</label>
+                        <input type="number" class="form-control" id="prod-price" placeholder="28" min="1" required />
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Available Quantity *</label>
+                        <input type="number" class="form-control" id="prod-qty" placeholder="100" min="1" required />
+                    </div>
+                </div>
+
+                <!-- Min Order + Harvest Date -->
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px;">
+                    <div class="form-group">
+                        <label class="form-label">Minimum Order Quantity</label>
+                        <input type="number" class="form-control" id="prod-min" placeholder="1" />
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Harvest Date</label>
+                        <input type="date" class="form-control" id="prod-harvest" />
+                    </div>
+                </div>
+
+                <!-- Description -->
+                <div class="form-group">
+                    <label class="form-label">Product Description</label>
+                    <textarea class="form-control" id="prod-desc"
+                        placeholder="Describe your product — freshness, origin, growing method, certifications…"
+                        rows="4"></textarea>
+                </div>
+
+                <!-- Organic Certification -->
+                <div
+                    style="display:flex; align-items:center; gap:12px; margin-bottom:24px; background:rgba(46,125,50,0.04); padding:16px; border-radius:var(--radius-sm); border:1px solid var(--border);">
+                    <input type="checkbox" id="prod-organic" style="width:20px;height:20px;" />
+                    <label for="prod-organic">
+                        <strong>🌿 Organic Certified</strong>
+                        <p class="text-muted" style="font-size:13px; margin-top:2px;">Mark if this product is
+                            organically grown or certified.</p>
+                    </label>
+                </div>
+
+                <div id="submit-error" style="display:none; color:#c62828; background:#ffebee; border:1px solid #ef9a9a; border-radius:8px; padding:12px; margin-bottom:16px; font-size:14px;"></div>
+
+                <!-- Submit -->
+                <div style="display:flex; gap:12px;">
+                    <button type="submit" class="btn btn-primary btn-lg" id="submit-btn">
+                        ✅ List Product
+                    </button>
+                    <a href="farmer-dashboard.html" class="btn btn-outline btn-lg">Cancel</a>
+                </div>
+            </form>
+        </main>
+    </div>
+
+    <div class="toast-container" id="toast-container"></div>
+
+    <script src="../js/app.js"></script>
+    <script>
+        const catToImg = {
+            'Vegetables': '../images/products/tomatoes.png',
+            'Fruits': '../images/products/mangoes.png',
+            'Grains': '../images/products/wheat-flour.png',
+            'Pulses': '../images/products/toor-dal.png',
+            'Dairy': '../images/products/milk.png',
+            'Organic': '../images/products/basmati-rice.png',
+            'Spices': '../images/products/turmeric.png',
+            'Oil Seeds': '../images/products/groundnut-oil.png'
+        };
+
+        async function submitProduct(e) {
+            e.preventDefault();
+            document.getElementById('submit-error').style.display = 'none';
+
+            const user = KBSession.getUser();
+            if (!user || user.role !== 'farmer') {
+                window.location.href = 'login.html';
+                return;
+            }
+
+            const btn = document.getElementById('submit-btn');
+            btn.textContent = '⏳ Listing…';
+            btn.disabled = true;
+
+            const name = document.getElementById('prod-name').value.trim();
+            const cat = document.getElementById('prod-category').value;
+            const price = parseFloat(document.getElementById('prod-price').value);
+
+            const product = {
+                name,
+                cat,
+                unit: document.getElementById('prod-unit').value,
+                price,
+                qty: document.getElementById('prod-qty').value,
+                desc: document.getElementById('prod-desc').value,
+                organic: document.getElementById('prod-organic').checked,
+                farmer: user.name,
+                farmerId: user.id,
+                region: user.city || user.village || 'India',
+                img: catToImg[cat] || '../images/products/tomatoes.png',
+                rating: 5.0,
+                reviews: 0
+            };
+
+            try {
+                await KBApi.request('/api/products', 'POST', product);
+                showToast(`✅ "${name}" listed successfully!`, 'success');
+                setTimeout(() => window.location.href = 'farmer-dashboard.html', 1500);
+            } catch (err) {
+                const errEl = document.getElementById('submit-error');
+                errEl.textContent = err.message || 'Failed to list product. Please try again.';
+                errEl.style.display = 'block';
+                btn.textContent = '✅ List Product';
+                btn.disabled = false;
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const user = KBSession.getUser();
+            if (!user || user.role !== 'farmer') {
+                window.location.href = 'login.html';
+                return;
+            }
+            document.getElementById('sidebar-avatar').textContent = user.name[0].toUpperCase();
+            document.getElementById('sidebar-name').textContent = user.name;
+            document.getElementById('sidebar-role').textContent = `🌾 Farmer · ${user.city || ''}`;
+
+            // Update nav actions
+            const navActions = document.getElementById('add-nav-actions');
+            if (navActions) {
+                navActions.innerHTML = `
+                    <span style="font-size:14px;color:var(--text-muted);">${user.name.split(' ')[0]}</span>
+                    <a href="farmer-dashboard.html" class="btn btn-outline btn-sm">← Dashboard</a>
+                `;
+            }
+
+            // Handle deep links from farmer-dashboard (e.g., ?section=my-products)
+            const params = new URLSearchParams(location.search);
+            const section = params.get('section');
+            if (section) {
+                window.location.href = `farmer-dashboard.html#${section}`;
+            }
+        });
+    </script>
+</body>
+
+</html>
